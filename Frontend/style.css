@@ -230,6 +230,22 @@ main {
     border-bottom: 1px solid #f0f0f0;
 }
 
+#container {
+	margin: 0px auto;
+	width: 700px;
+	height: 575px;
+    text-align: center;
+}
+#videoElement {
+	width: 700px;
+	height: 525px;
+	background-color: #666;
+}
+
+.la-bars    {
+    cursor: pointer;
+}
+
 .card-header button {
     background: var(--main-color);
     border-radius: 10px;
