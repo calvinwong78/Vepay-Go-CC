@@ -230,22 +230,6 @@ main {
     border-bottom: 1px solid #f0f0f0;
 }
 
-#container {
-	margin: 0px auto;
-	width: 700px;
-	height: 575px;
-    text-align: center;
-}
-#videoElement {
-	width: 700px;
-	height: 525px;
-	background-color: #666;
-}
-
-.la-bars    {
-    cursor: pointer;
-}
-
 .card-header button {
     background: var(--main-color);
     border-radius: 10px;
@@ -292,6 +276,36 @@ tr rd:last-child {
     width: 100%;
     overflow-x: auto;
 }
+
+.livevid {
+    margin-top: 3.5rem;
+    justify-content: space-between;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 2px;
+}
+
+.liveheader {
+    text-align: center;
+}
+
+.video-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 1rem;
+}
+
+.table-video {
+    text-align: right;
+    margin-top: 2rem;
+}
+
+.video-container {
+    display: block;
+    align-items: center;
+    margin: 0px auto ;
+}
+
 
 @media only screen and (max-width: 1200px) {
     .sidebar {
@@ -347,6 +361,10 @@ tr rd:last-child {
         grid-template-columns: 100%;
     }
 
+    .video-wrapper {
+        grid-template-columns: 100%;
+    }
+
     .search-wrapper {
         display: none;
     }
@@ -359,6 +377,8 @@ tr rd:last-child {
         display: flex;
         align-items: center;
     }
+
+   
 
     header h2 label {
         display: inline-block;
@@ -426,6 +446,5 @@ tr rd:last-child {
 @media only screen and (max-width: 560px) {
     .cards {
         grid-template-columns: 100%
-
     }
 }
