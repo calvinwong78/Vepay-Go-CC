@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import CameraLive from './components/camera';
+import CameraLive from './components/Camera';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
