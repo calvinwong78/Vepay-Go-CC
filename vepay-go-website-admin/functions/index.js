@@ -1,4 +1,6 @@
+/* eslint-disable linebreak-style */
 module.exports = {
-    ...require("./controllers/user"),
-  };
-  
+  ...require("./controller/user"),
+  ...require("./controller/authadmin"),
+};
+

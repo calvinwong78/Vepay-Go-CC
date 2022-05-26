@@ -28,3 +28,34 @@ register.addEventListener('submit', (e) => {
         })
 })
 
+login.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = login.email.value;
+    const password = login.password.value;
+
+    // eslint-disable-next-line no-undef
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((user) => {
+            console.log('logged in !!', user);
+            login.reset();
+        })
+        .catch((error) => {
+            login.querySelector('.error').textContent = error.message;
+        })
+});
+
+ firebase.auth().onAuthStateChanged((user) => {
+    if(user) {
+        authenticationwrapping.classList.remove('open');
+        authenticationmodal.forEach(modal => modal.classList.remove('active'));
+    } else {
+        authenticationwrapping.classList.add('open');
+        authenticationmodal[0].classList.add('active');
+    }
+})
+
+signout.addEventListener('click', () => {
+    firebase.auth().signOut()
+        .then(() => console.log('signing out !!'))
+})
