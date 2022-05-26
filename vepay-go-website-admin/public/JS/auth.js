@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const authenticationswitch = document.querySelectorAll('.switch');
 const authenticationmodal = document.querySelectorAll('.auth .modal');
 const authenticationwrapping = document.querySelector('.auth');
