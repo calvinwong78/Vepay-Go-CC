@@ -1,29 +1,31 @@
 import React from "react";
 import * as tf from "@tensorflow/tfjs";
-import { loadGraphModel } from "@tensorflow/tfjs-converter";
-import '../assets/Camera.css';
+import "../../assets/Styles/Camera.css";
+import { load_model } from "../../functions/modelCalling";
+import Camera from "../../components/Camera/Camera";
+import Canvas from "../../components/Canvas/Canvas";
+import * as Constants from "../../constants"
 tf.setBackend("webgl");
 
-async function load_model() {
-  const model = await loadGraphModel("/web_model/model.json");
-  return model;
-}
-
-class CameraLive extends React.Component {
-  videoRef = React.createRef();
-  canvasRef = React.createRef();
-  canvasOutput = React.createRef();
-
-  state = {
-    objects: {},
-    threshold: 0.4,
-    names: ["license-plate"],
-    maxFrameDisappeared: 10,
-    disappeared: {},
-    nextObjectId: 0,
-    increment: 1,
-    currentImage: null,
-  };
+class LicensePlateDetection extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
+    // Setting up states
+    this.state = {
+      objects: {},
+      names: ["license-plate"],
+      disappeared: {},
+      countSamePosition: {},
+      nextObjectId: 0,
+      currentImage: null,
+    };
+    // Setting up refs
+    this.videoRef = React.createRef();
+    this.canvasRef = React.createRef();
+    this.canvasOutput = React.createRef();
+    this.prevObject = React.createRef(null);
+  }
 
   // invoke as soon as the compoenents is mounted (inserted to the tree)
   componentDidMount() {
@@ -61,14 +63,13 @@ class CameraLive extends React.Component {
         });
     }
   }
-
-  // componentDidUpdate() {
-  //   console.log("Updates");
-  //   console.log(this.state.objects);
-  //   console.log(this.state.disappeared);
-  //   console.log(this.state.nextObjectId);
-  //   console.log(this.state.increment);
-  // }
+  componentDidUpdate() {
+    console.log("updates");
+    console.log("objects = ", this.state.objects);
+    console.log("countSamePosition = ", this.state.countSamePosition);
+    console.log("disappeared = ", this.state.disappeared);
+    console.log("nextObjectId = ", this.state.nextObjectId);
+  }
 
   // ###################################################################################################
   detectFrame = (video, model) => {
@@ -85,26 +86,28 @@ class CameraLive extends React.Component {
   };
 
   processInput = (videoFrame) => {
-    const image = tf.browser
-      .fromPixels(videoFrame)
-      .resizeBilinear([
-        this.videoRef.current.offsetHeight,
-        this.videoRef.current.offsetWidth,
-      ])
-      .toFloat();
-    // result shape: [height, width, channels]
-    
-    // update the image
-    this.setState({
-      currentImage: image,
-    });
+    if (videoFrame) {
+      const image = tf.browser
+        .fromPixels(videoFrame)
+        .resizeBilinear([
+          this.videoRef.current.offsetHeight,
+          this.videoRef.current.offsetWidth,
+        ])
+        .toFloat();
+      // result shape: [height, width, channels]
 
-    // resize and normalized image expand the dimension by 1 so that
-    // it can be input to the object detection model
-    const tfImg = image.resizeBilinear([640, 640]).toFloat();
-    const normalizedTfImg = tfImg.div(255.0);
-    const expandedimg = normalizedTfImg.expandDims(0);
-    return expandedimg;
+      // update the image
+      this.setState({
+        currentImage: image,
+      });
+
+      // resize and normalized image expand the dimension by 1 so that
+      // it can be input to the object detection model
+      const tfImg = image.resizeBilinear([Constants.WIDTH, Constants.HEIGHT]).toFloat();
+      const normalizedTfImg = tfImg.div(255.0);
+      const expandedimg = normalizedTfImg.expandDims(0);
+      return expandedimg;
+    }
   };
 
   renderPredictions = (predictions) => {
@@ -135,7 +138,6 @@ class CameraLive extends React.Component {
     const valid_detections_data = this.buildDetectedObjects(
       this.videoRef.current,
       scoresData,
-      this.state.threshold,
       boxesData,
       classesData,
       this.state.names
@@ -154,7 +156,6 @@ class CameraLive extends React.Component {
   buildDetectedObjects = (
     videoFrame,
     scoresData,
-    threshold,
     boxesData,
     classesData,
     names
@@ -164,7 +165,7 @@ class CameraLive extends React.Component {
     // Detail abput the function
     // array.forEach(function(currentValue, index, arr), thisValue)
     scoresData.forEach((score, i) => {
-      if (score > threshold) {
+      if (score > Constants.THRESHOLD) {
         const bbox = [];
         let [minX, minY, maxX, maxY] = boxesData.slice(i * 4, (i + 1) * 4);
         minX *= videoFrame.offsetWidth;
@@ -238,15 +239,21 @@ class CameraLive extends React.Component {
       centerY: data["centerY"],
       regionOfInterestArr: data["regionOfInterestArr"],
     };
+    this.prevObject.current = copyObjects[this.state.nextObjectId];
 
     // add disappeared
     const copyDisappeared = { ...this.state.disappeared };
     copyDisappeared[this.state.nextObjectId] = 0;
 
+    // add disappeared
+    const copyCountSamePosition = { ...this.state.countSamePosition };
+    copyCountSamePosition[this.state.nextObjectId] = 0;
+
     this.setState((state) => ({
       nextObjectId: state.nextObjectId + 1,
       objects: copyObjects,
       disappeared: copyDisappeared,
+      countSamePosition: copyCountSamePosition,
     }));
   };
 
@@ -262,6 +269,7 @@ class CameraLive extends React.Component {
       centerY: data["centerY"],
       regionOfInterestArr: data["regionOfInterestArr"],
     };
+    this.prevObject.current = copyObjects[objectId];
 
     // add disappeared
     const copyDisappeared = { ...this.state.disappeared };
@@ -274,36 +282,33 @@ class CameraLive extends React.Component {
   };
 
   removeObj = (objectId) => {
-    // display image
-    this.canvasOutput.current.top = this.videoRef.current.offsetHeight;
-    tf.browser
-    .toPixels(
-      this.state.objects[objectId]["regionOfInterestArr"],
-      this.canvasOutput.current
-      )
-      .then(() => {
-        // It's not bad practice to clean up and make sure we got everything
-        console.log("Make sure we cleaned up", tf.memory().numTensors);
-      });
-      
-    // upload image information
-    // send data to the image segmentation
-    console.log(this.state.objects[objectId]["regionOfInterestArr"])
-
-
-
     // delete objects element based on key from objectId argument
     const copyObjects = { ...this.state.objects };
     delete copyObjects[objectId];
+    this.prevObject.current = null;
 
     // delete disappeared element based on key from objectId argument
     const copyDisappeared = { ...this.state.disappeared };
     delete copyDisappeared[objectId];
 
+    const copyCountSamePosition = { ...this.state.countSamePosition };
+    delete copyCountSamePosition[objectId];
+
     this.setState({
       objects: copyObjects,
       disappeared: copyDisappeared,
+      countSamePosition: copyCountSamePosition,
     });
+  };
+
+  processDetectedLicensePlate = (data) => {
+    tf.browser
+      .toPixels(data["regionOfInterestArr"], this.canvasOutput.current)
+      .then(() => {
+        // It's not bad practice to clean up and make sure we got everything
+        console.log("Make sure we cleaned up", tf.memory().numTensors);
+      });
+    console.log(data["regionOfInterestArr"])
   };
 
   update = (valid_detections_data) => {
@@ -317,7 +322,7 @@ class CameraLive extends React.Component {
           disappeared: copyDisappeared,
         });
         // check if the value has reach maxFrameDisappeared
-        if (copyDisappeared[objectId] >= this.state.maxFrameDisappeared) {
+        if (copyDisappeared[objectId] >= Constants.MAXFRAMEDISAPPEARED) {
           this.removeObj(objectId);
         }
       }
@@ -329,12 +334,12 @@ class CameraLive extends React.Component {
       inputData.push(this.extractData(item));
     }
 
-    let count = Object.keys(this.state.objects).length;
+    let countExistingObjects = Object.keys(this.state.objects).length;
 
     // check if current obejcts are emtpy
     // if "true" than all of the detected objects are still
     // just add them all.
-    if (!count) {
+    if (!countExistingObjects) {
       for (let data of inputData) {
         this.addObj(data);
       }
@@ -344,26 +349,19 @@ class CameraLive extends React.Component {
     else {
       // console.log("masuk sene");
       let distances = {};
-      let distancesRowCount = 0;
-      let distancesColumnCount = 0;
       for (let key in this.state.objects) {
         distances[key] = [];
-        distancesRowCount++;
         for (let inputCentroid of inputData) {
           const currObject = this.state.objects[key];
           distances[key].push(
             this.calculateEucledianDistance(inputCentroid, currObject)
           );
-          distancesColumnCount++;
         }
       }
-      distancesColumnCount /= distancesRowCount;
 
-
-      let usedKey = new Set();
-      let usedCentroidIndex = new Set();
 
       for (let key in distances) {
+        console.log("key in distances = ", key);
         const argSortedDistances = distances[key]
           .map((val, ind) => {
             return { ind, val };
@@ -372,36 +370,43 @@ class CameraLive extends React.Component {
             return a.val > b.val ? 1 : a.val === b.val ? 0 : -1;
           })
           .map((obj) => obj.ind);
-        usedKey.add(parseInt(key));
-        usedCentroidIndex.add(argSortedDistances[0]);
-        this.updateObj(inputData[argSortedDistances[0]], key);
-      }
+        const currObject = inputData[argSortedDistances[0]];
 
-      if (distancesRowCount >= distancesColumnCount) {
-        for (let key in distances) {
-          if (!usedKey.has(key)) {
-            const copyDisappeared = { ...this.state.disappeared };
-            copyDisappeared[key]++;
-            if (copyDisappeared[key] >= this.state.maxFrameDisappeared) {
-              this.removeObj(key);
+        if (this.prevObject.current != null) {
+          if (
+            this.calculateEucledianDistance(
+              this.prevObject.current,
+              currObject
+            ) < 30
+          ) {
+            let copyCountSamePosition = { ...this.state.countSamePosition };
+            copyCountSamePosition[key]++;
+            this.setState({
+              countSamePosition: copyCountSamePosition,
+            });
+            if (
+              copyCountSamePosition[key] === Constants.MAXFRAMEFORPROCESSING
+            ) {
+              this.processDetectedLicensePlate(currObject);
             }
           }
         }
-      } else {
-        for (let i = 0; i < distancesColumnCount; i++) {
-          if (!usedCentroidIndex.has(i)) {
-            this.addObj(inputData[i]["centerX"], inputData[i]["centerY"]);
-          }
-        }
+        this.updateObj(inputData[argSortedDistances[0]], key);
       }
+
+     
     }
   };
 
   extractData = (item) => {
     let x = parseInt(item["bbox"][0].toFixed(0));
+
+    // check of the coordinate out of box or not
     x = x < 0 ? 0 : x;
     x = x > this.videoRef.current.width ? this.videoRef.current.width : x;
+    
     let y = parseInt(item["bbox"][1].toFixed(0));
+    // check of the coordinate out of box or not
     y = y < 0 ? 0 : y;
     y = y > this.videoRef.current.height ? this.videoRef.current.height : y;
 
@@ -414,10 +419,9 @@ class CameraLive extends React.Component {
     const startingPoint = [y, x, 0];
     const newSize = [height, width, 3];
     const regionOfInterest = tf.slice(image, startingPoint, newSize);
-    console.log(regionOfInterest);
     const regionOfInterestArr = regionOfInterest.arraySync();
 
-    return { x, y, width, height, centerX, centerY, regionOfInterestArr, };
+    return { x, y, width, height, centerX, centerY, regionOfInterestArr };
   };
 
   calculateEucledianDistance = (x1_y1, x2_y2) => {
@@ -429,32 +433,14 @@ class CameraLive extends React.Component {
   render() {
     return (
       <div>
-        <video
-          className="size"
-          autoPlay
-          playsInline
-          muted
-          ref={this.videoRef}
-          id="frame"
-          width={840}
-          height={630}
-        />
-        <canvas
-          className="size"
-          ref={this.canvasRef}
-          width={640}
-          height={480}
-        />
+        <Camera ref={this.videoRef} width={840} height={630} />
+        <Canvas ref={this.canvasRef} width={640} height={480} />
         <div>
-          <canvas
-            id="output"
-            style={{ position: "fixed"}}
-            ref={this.canvasOutput}
-          />
+          <Canvas ref={this.canvasOutput} style={{ position: "fixed" }} />
         </div>
       </div>
     );
   }
 }
 
-export default CameraLive;
+export default LicensePlateDetection;
