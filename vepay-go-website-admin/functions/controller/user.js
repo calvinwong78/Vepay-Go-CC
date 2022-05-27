@@ -42,22 +42,49 @@ userApp.get("/users/:id", async (req, res) => {
 });
 
 // register user
-userApp.post("/registration", (req, res) => {
+userApp.post("/registration", async (req, res) => {
+  const snapshot = await db.collection("users").get();
   const user = req.body;
+
+  const userNewEmail = user.email;
+  const userEmail = [];
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    const emailData = data.email;
+    userEmail.push(emailData);
+  });
+
+  if (userEmail.includes(userNewEmail)) {
+    return res.status(404).send({"response": "Email already used by another account!"});
+  }
 
   db.collection("users").add(user);
 
-  res.status(201).send("Registration success!");
+  res.status(201).send({"response": "Registration success!"});
 });
 
 // edit user
 userApp.put("/users/:id", async (req, res) => {
   const snapshot = await db.collection("users").doc(req.params.id).get();
+  const snapshotAll = await db.collection("users").get();
   const body = req.body;
+
+  const userNewEmail = body.email;
+  const userEmail = [];
+  snapshotAll.forEach((doc) => {
+    const data = doc.data();
+    const emailData = data.email;
+    userEmail.push(emailData);
+  });
 
   if (!snapshot.exists) {
     return res.status(404).send({"response": "User not found!"});
   }
+
+  if (userEmail.includes(userNewEmail)) {
+    return res.status(404).send({"response": "Email already used by another account!"});
+  }
+
   await db.collection("users").doc(req.params.id).update(body);
   res.status(200).send("User profile updated!");
 });
@@ -73,7 +100,7 @@ userApp.delete("/users/:id", async (req, res) => {
   }
   await db.collection("users").doc(req.params.id).delete();
 
-  res.status(200).send(`User deleted with ID: ${userId}`);
+  res.status(200).send({"response": `User deleted with ID: ${userId}`});
 });
 
 
