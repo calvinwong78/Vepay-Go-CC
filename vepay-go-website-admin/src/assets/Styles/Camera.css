@@ -1,6 +1,20 @@
-.size {
+/* .size {
   position: fixed;
   top: 0;
   left: 0;
+} */
+.license-plate-detection-container {
+  width: 100%;
+  display: flex;
 }
 
+.camera {
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 5;
+}
+.canvas {
+  position: absolute;
+  z-index: 6;
+}

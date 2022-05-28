@@ -4,7 +4,7 @@ import "../../assets/Styles/Camera.css";
 import { load_model } from "../../functions/modelCalling";
 import Camera from "../../components/Camera/Camera";
 import Canvas from "../../components/Canvas/Canvas";
-import * as Constants from "../../constants"
+import * as Constants from "../../constants";
 tf.setBackend("webgl");
 
 class LicensePlateDetection extends React.Component {
@@ -22,8 +22,8 @@ class LicensePlateDetection extends React.Component {
     };
     // Setting up refs
     this.videoRef = React.createRef();
-    this.canvasRef = React.createRef();
-    this.canvasOutput = React.createRef();
+    this.canvasAnnotRef = React.createRef();
+    this.canvasOutputRef = React.createRef();
     this.prevObject = React.createRef(null);
   }
 
@@ -68,7 +68,6 @@ class LicensePlateDetection extends React.Component {
     console.log("objects = ", this.state.objects);
     console.log("countSamePosition = ", this.state.countSamePosition);
     console.log("disappeared = ", this.state.disappeared);
-    console.log("nextObjectId = ", this.state.nextObjectId);
   }
 
   // ###################################################################################################
@@ -103,7 +102,9 @@ class LicensePlateDetection extends React.Component {
 
       // resize and normalized image expand the dimension by 1 so that
       // it can be input to the object detection model
-      const tfImg = image.resizeBilinear([Constants.WIDTH, Constants.HEIGHT]).toFloat();
+      const tfImg = image
+        .resizeBilinear([Constants.WIDTH, Constants.HEIGHT])
+        .toFloat();
       const normalizedTfImg = tfImg.div(255.0);
       const expandedimg = normalizedTfImg.expandDims(0);
       return expandedimg;
@@ -113,12 +114,12 @@ class LicensePlateDetection extends React.Component {
   renderPredictions = (predictions) => {
     // get canvas element and resize according to camera size\
     // so that it the annotation will fit perfectly
-    const canvas = this.canvasRef.current;
+    const canvas = this.canvasAnnotRef.current;
     canvas.width = this.videoRef.current.offsetWidth;
     canvas.height = this.videoRef.current.offsetHeight;
 
     // get context for drawing
-    const ctx = this.canvasRef.current.getContext("2d");
+    const ctx = this.canvasAnnotRef.current.getContext("2d");
 
     // console.log(this.videoRef.current.width, this.videoRef.current.height);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -146,7 +147,7 @@ class LicensePlateDetection extends React.Component {
     this.update(valid_detections_data);
 
     valid_detections_data.forEach((item) => {
-      const ctx = this.canvasRef.current.getContext("2d");
+      const ctx = this.canvasAnnotRef.current.getContext("2d");
       this.drawBoundingBox(item, ctx);
       this.drawText(item, ctx);
     });
@@ -303,12 +304,12 @@ class LicensePlateDetection extends React.Component {
 
   processDetectedLicensePlate = (data) => {
     tf.browser
-      .toPixels(data["regionOfInterestArr"], this.canvasOutput.current)
+      .toPixels(data["regionOfInterestArr"], this.canvasOutputRef.current)
       .then(() => {
         // It's not bad practice to clean up and make sure we got everything
         console.log("Make sure we cleaned up", tf.memory().numTensors);
       });
-    console.log(data["regionOfInterestArr"])
+    console.log(data["regionOfInterestArr"]);
   };
 
   update = (valid_detections_data) => {
@@ -359,7 +360,6 @@ class LicensePlateDetection extends React.Component {
         }
       }
 
-
       for (let key in distances) {
         console.log("key in distances = ", key);
         const argSortedDistances = distances[key]
@@ -393,8 +393,6 @@ class LicensePlateDetection extends React.Component {
         }
         this.updateObj(inputData[argSortedDistances[0]], key);
       }
-
-     
     }
   };
 
@@ -402,16 +400,31 @@ class LicensePlateDetection extends React.Component {
     let x = parseInt(item["bbox"][0].toFixed(0));
 
     // check of the coordinate out of box or not
-    x = x < 0 ? 0 : x;
-    x = x > this.videoRef.current.width ? this.videoRef.current.width : x;
-    
+    if (x < 0) {
+      x = 0;
+    }
+    console.log("x = ", x);
+
     let y = parseInt(item["bbox"][1].toFixed(0));
     // check of the coordinate out of box or not
-    y = y < 0 ? 0 : y;
-    y = y > this.videoRef.current.height ? this.videoRef.current.height : y;
+    if (y < 0) {
+      y = 0;
+    }
+
+    console.log("y = ", y);
 
     let width = parseInt(item["bbox"][2].toFixed(0));
+    if (x + width > this.videoRef.current.offsetWidth) {
+      width = this.videoRef.current.offsetWidth - x;
+    }
+    console.log("width = ", width);
+
     let height = parseInt(item["bbox"][3].toFixed(0));
+    if (y + height > this.videoRef.current.offsetHeight) {
+      height = this.videoRef.current.offsetHeight - y;
+    }
+    console.log("height = ", height);
+
     let centerX = x + width / 2.0;
     let centerY = y + height / 2.0;
 
@@ -432,11 +445,11 @@ class LicensePlateDetection extends React.Component {
 
   render() {
     return (
-      <div>
-        <Camera ref={this.videoRef} width={840} height={630} />
-        <Canvas ref={this.canvasRef} width={640} height={480} />
+      <div className="license-plate-detection-container">
+        <Camera className={"camera"} videoRef={this.videoRef} />
+        <Canvas className={"canvas"} canvasRef={this.canvasAnnotRef} />
         <div>
-          <Canvas ref={this.canvasOutput} style={{ position: "fixed" }} />
+          <Canvas canvasRef={this.canvasOutputRef} style={{ position: "fixed" }} />
         </div>
       </div>
     );

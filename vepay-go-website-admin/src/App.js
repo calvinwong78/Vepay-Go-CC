@@ -3,9 +3,7 @@ import LicensePlateDetection from './containers/LicensePlateDetection/LicensePla
 
 function App() {
   return (
-    <div>
-      <LicensePlateDetection/> 
-    </div>
+    <LicensePlateDetection/> 
   );
 }
 

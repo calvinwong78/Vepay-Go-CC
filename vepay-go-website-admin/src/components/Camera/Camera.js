@@ -1,18 +1,16 @@
 import React from "react";
-
-const Camera = React.forwardRef((props, ref) => {
-  return (
-    <video
-      className="size"
-      autoPlay
-      playsInline
-      muted
-      ref={ref}
-      id="frame"
-      width={props.width}
-      height={props.height}
-    />
-  );
-});
-
+class Camera extends React.Component {
+  render() {
+    return (
+      <video
+        className={this.props.className}
+        autoPlay
+        playsInline
+        muted
+        ref={this.props.videoRef}
+        id="frame"
+      />
+    );
+  }
+}
 export default Camera;

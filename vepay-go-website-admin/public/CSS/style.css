@@ -339,6 +339,7 @@ tr rd:last-child {
     display: block;
     align-items: center;
     margin: 0px auto ;
+    width: 100%;
 }
 
 
