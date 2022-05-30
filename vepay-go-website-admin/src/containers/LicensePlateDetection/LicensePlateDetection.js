@@ -5,6 +5,8 @@ import { load_model } from "../../functions/modelCalling";
 import Camera from "../../components/Camera/Camera";
 import Canvas from "../../components/Canvas/Canvas";
 import * as Constants from "../../constants";
+import Table from "../../components/Table/Table";
+import InferenceResult from "../../components/InferenceResult/InferenceResult";
 tf.setBackend("webgl");
 
 class LicensePlateDetection extends React.Component {
@@ -23,7 +25,7 @@ class LicensePlateDetection extends React.Component {
     // Setting up refs
     this.videoRef = React.createRef();
     this.canvasAnnotRef = React.createRef();
-    this.canvasOutputRef = React.createRef();
+    this.canvasOutputRef = React.createRef(null);
     this.prevObject = React.createRef(null);
   }
 
@@ -445,11 +447,47 @@ class LicensePlateDetection extends React.Component {
 
   render() {
     return (
-      <div className="license-plate-detection-container">
-        <Camera className={"camera"} videoRef={this.videoRef} />
-        <Canvas className={"canvas"} canvasRef={this.canvasAnnotRef} />
-        <div>
-          <Canvas canvasRef={this.canvasOutputRef} style={{ position: "fixed" }} />
+      // <div>
+      // <h2>Camera</h2>
+      // <div className="license-plate-detection-container">
+      //   <Camera className={"camera"} videoRef={this.videoRef} />
+      //   <Canvas className={"canvas"} canvasRef={this.canvasAnnotRef} />
+      //   <div>
+      //     <Canvas
+      //       canvasRef={this.canvasOutputRef}
+      //       style={{ position: "fixed" }}
+      //     />
+      //   </div>
+      // </div>
+      // </div>
+      <div>
+        <div className="liveheader">
+          <h1>Live Camera Feed</h1>
+        </div>
+        <div className="video-wrapper">
+          <div className="video-container" id="video-container">
+            <h2 style={{ textAlign: "center" }}>Camera</h2>
+            <div className="license-plate-detection-container">
+              <Camera className={"camera"} videoRef={this.videoRef} />
+              <Canvas className={"canvas"} canvasRef={this.canvasAnnotRef} />
+            </div>
+          </div>
+          <div className="inference-result">
+            <h2 style={{ textAlign: "center" }}>Information</h2>
+            <InferenceResult
+              inferenceResult={"B1912BFF"}
+              location={"Senayan City Mall"}
+              licensePlatePicture={
+                <Canvas
+                  canvasRef={this.canvasOutputRef}
+                />
+              }
+            />
+          </div>
+          <div className="vehicle-parking-logs">
+            <h2 style={{ textAlign: "center" }}>Vehicle Parking Logs</h2>
+            <Table />
+          </div>
         </div>
       </div>
     );
