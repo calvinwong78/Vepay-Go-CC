@@ -486,7 +486,7 @@ class LicensePlateDetection extends React.Component {
           </div>
           <div className="vehicle-parking-logs">
             <h2 style={{ textAlign: "center" }}>Vehicle Parking Logs</h2>
-            <Table />
+            <Table url={"https://us-central1-vepay-go.cloudfunctions.net/user/users"}/>
           </div>
         </div>
       </div>
