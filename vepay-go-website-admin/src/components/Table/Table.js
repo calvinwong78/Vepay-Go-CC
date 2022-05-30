@@ -15,11 +15,14 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
+    console.log("DARI COMPONENTDIDMOUNT");
+    console.log(this.props.isDataInput);
     this.getUserData();
   }
 
-  getUserData= () => {
-    axios(this.props.url)
+  getUserData = () => {
+    axios
+      .get(this.props.getUserDataUrl)
       .then((res) => {
         const data = res.data;
         this.setState({
@@ -27,18 +30,31 @@ class Table extends React.Component {
         });
       })
       .catch((err) => console.log(err));
+  };
+
+  postUserData = () => {
+    const jsonData = {
+      email: "jtesttasdasdestasdasdasdas.com",
+      password: "test",
+      fullName: "marcell terbaru abis input data",
+    }
+    axios
+      .post(this.props.postUserDataUrl, {jsonData})
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  componentDidUpdate() {
+    console.log("MASUK DARI COMPONENTDIDUPDATE");
+    if (this.props.isDataInput) {
+      console.log("Masuk ada data input baru");
+      this.postUserData();
+      this.getUserData();
+    }
   }
-  // componentDidUpdate() {
-  //   axios(this.props.url)
-  //     .then((res) => {
-  //       const data = res.data;
-  //       this.setState({
-  //         dataTable: data,
-  //       });
-  //     })
-  //     .catch((err) => console.log(err));
-  //   // console.log("MASUK")
-  // }
 
   TableHeadItem = ({ item }) => <th>{item.heading}</th>;
   TableRow = ({ item, column }) => (

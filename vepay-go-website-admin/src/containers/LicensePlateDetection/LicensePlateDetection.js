@@ -21,6 +21,7 @@ class LicensePlateDetection extends React.Component {
       countSamePosition: {},
       nextObjectId: 0,
       currentImage: null,
+      isDataInput: false,
     };
     // Setting up refs
     this.videoRef = React.createRef();
@@ -66,10 +67,15 @@ class LicensePlateDetection extends React.Component {
     }
   }
   componentDidUpdate() {
-    console.log("updates");
-    console.log("objects = ", this.state.objects);
-    console.log("countSamePosition = ", this.state.countSamePosition);
-    console.log("disappeared = ", this.state.disappeared);
+    // console.log("updates");
+    // console.log("objects = ", this.state.objects);
+    // console.log("countSamePosition = ", this.state.countSamePosition);
+    // console.log("disappeared = ", this.state.disappeared);
+    if (this.state.isDataInput === true) {
+      this.setState({
+        isDataInput: false,
+      });
+    }
   }
 
   // ###################################################################################################
@@ -311,7 +317,13 @@ class LicensePlateDetection extends React.Component {
         // It's not bad practice to clean up and make sure we got everything
         console.log("Make sure we cleaned up", tf.memory().numTensors);
       });
-    console.log(data["regionOfInterestArr"]);
+    // function hans
+    // function bintang
+    this.setState({
+      isDataInput: true,
+    });
+
+    // console.log(data["regionOfInterestArr"]);
   };
 
   update = (valid_detections_data) => {
@@ -477,16 +489,20 @@ class LicensePlateDetection extends React.Component {
             <InferenceResult
               inferenceResult={"B1912BFF"}
               location={"Senayan City Mall"}
-              licensePlatePicture={
-                <Canvas
-                  canvasRef={this.canvasOutputRef}
-                />
-              }
+              licensePlatePicture={<Canvas canvasRef={this.canvasOutputRef} />}
             />
           </div>
           <div className="vehicle-parking-logs">
             <h2 style={{ textAlign: "center" }}>Vehicle Parking Logs</h2>
-            <Table url={"https://us-central1-vepay-go.cloudfunctions.net/user/users"}/>
+            <Table
+              getUserDataUrl={
+                "https://us-central1-vepay-go.cloudfunctions.net/user/users"
+              }
+              postUserDataUrl={
+                "https://us-central1-vepay-go.cloudfunctions.net/user/registration"
+              }
+              isDataInput={this.state.isDataInput}
+            />
           </div>
         </div>
       </div>
