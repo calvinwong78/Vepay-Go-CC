@@ -21,6 +21,28 @@
   </head>
 
   <body>
+    <div class="auth open">
+        <div class="modal ">
+            <h2>Login</h2>
+            <form class="login">
+                <input type="text" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
+                <button>Login</button>
+                <p class="error"></p>
+            </form>
+            <div>No account? <a class="switch">Register Here</a></div>
+        </div>
+        <div class="modal">
+            <h2>Register</h2>
+            <form class="register">
+                <input type="text" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
+                <button>Register</button>
+                <p class="error"></p>
+            </form>
+            <div>Got account? <a class="switch">Login Here</a></div>
+        </div>
+    </div>
 
     <input type="checkbox" name="" id="nav-toggle">
     <div class="sidebar">
@@ -56,49 +78,18 @@
                 Dashboard
             </h2>
 
-            <div class="search-wrapper">
-                <span class="las la-search"></span>
-                <input type="search" placeholder="Search here" />
-            </div>
-
             <div class="user-wrapper">
-                <img src="img/pika.jpg" width="40px" height="40px" alt="">
                 <div>
-                    <h4>
-                        Calvin W
-                    </h4>
-                    <small>Super Admin</small>
-                    <button class="signout">Sign Out</button>
+                    <button class="signout">Sign Out </button>
                 </div>
             </div>
         </header>
 
         <main>
-            <div class="auth">
-                <div class="modal ">
-                    <h2>Login</h2>
-                    <form class="login">
-                        <input type="text" name="email" placeholder="Email">
-                        <input type="password" name="password" placeholder="Password">
-                        <button>Login</button>
-                        <p class="error"></p>
-                    </form>
-                    <div>No account? <a class="switch">Register Here</a></div>
-                </div>
-                <div class="modal">
-                    <h2>Register</h2>
-                    <form class="register">
-                        <input type="text" name="email" placeholder="Email">
-                        <input type="password" name="password" placeholder="Password">
-                        <button>Register</button>
-                        <p class="error"></p>
-                    </form>
-                    <div>Got account? <a class="switch">Login Here</a></div>
-                </div>
-            </div>
+         
         
             
-            <div class="cards">
+          <!--  <div class="cards">
                 <div class="card-single">
                     <div>
                         <h1>54</h1>
@@ -139,7 +130,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="livevid" id="livevid-container">
                 <!-- <div class="liveheader">

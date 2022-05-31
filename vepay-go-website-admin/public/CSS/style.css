@@ -184,6 +184,8 @@ outline: none;
     align-items: center;
 }
 
+
+
 .user-wrapper img {
     border-radius: 50%;
     margin-right: 1rem;
@@ -271,9 +273,19 @@ main {
     padding: .5rem 1rem;
     border: 1px solid var(--main-color);
 }
+button {
+    background: var(--main-color);
+    border-radius: 10px;
+    color: #fff;
+    font-size: .8rem;
+    padding: .5rem 1rem;
+    border: 1px solid var(--main-color);
+}
 
 table {
     border-collapse: collapse;
+    width: 100%;
+    text-align: center;
    
 }
 
@@ -393,7 +405,7 @@ tr rd:last-child {
     position: fixed;
     background: #fafafa;
     display: none;
-    z-index: 10;
+    z-index: 500;
   }
   .auth.open{
     display: block;
