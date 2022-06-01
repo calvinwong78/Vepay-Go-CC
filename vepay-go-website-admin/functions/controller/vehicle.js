@@ -6,6 +6,7 @@ const cors = require("cors");
 
 const admin = require("firebase-admin");
 const db = admin.firestore();
+const userDb = db.collection("users");
 
 const vehicleApp = express();
 
@@ -13,7 +14,7 @@ vehicleApp.use(cors({origin: true}));
 
 // get all vehicle
 vehicleApp.get("/vehicles", async (req, res) => {
-  const snapshot = await db.collection("vehicles").get();
+  const snapshot = await db.collectionGroup("vehicles").get();
 
   const vehiclesData = [];
   snapshot.forEach((doc) => {
@@ -27,22 +28,26 @@ vehicleApp.get("/vehicles", async (req, res) => {
 });
 
 // get vehicle by ID
-vehicleApp.get("/vehicles/:id", async (req, res) => {
-  const snapshot = await db.collection("vehicles").doc(req.params.id).get();
+vehicleApp.get("/vehicles/:plat", async (req, res) => {
+  const vehicleData = [];
+  const snapshot = await db.collectionGroup("vehicles").where("licenseNumber", "==", req.params.plat).get();
 
-  const vehicleId = snapshot.id;
-  const vehicleData = snapshot.data();
+  snapshot.forEach((doc) => {
+    const id = doc.id;
+    const data = doc.data();
+    vehicleData.push({id, ...data});
+  });
 
-  if (!snapshot.exists) {
-    return res.status(404).send({"response": "User not found!"});
+  if (vehicleData.length === 0) {
+    return res.status(404).send({"response": "Vehicle not found!"});
   } else {
-    res.status(200).send(JSON.stringify({id: vehicleId, ...vehicleData}));
+    res.status(200).send(JSON.stringify(vehicleData));
   }
 });
 
 // register vehicle
-vehicleApp.post("/registration", async (req, res) => {
-  const snapshot = await db.collection("vehicles").get();
+vehicleApp.post("/registration/:id/:plat", async (req, res) => {
+  const snapshot = await db.collectionGroup("vehicles").get();
   const vehicle = req.body;
 
   const vehicleNewLicense = vehicle.licenseNumber;
@@ -57,15 +62,19 @@ vehicleApp.post("/registration", async (req, res) => {
     return res.status(404).send({"response": "License Number Already Used!"});
   }
 
-  db.collection("vehicles").add(vehicle);
+  userDb.doc(req.params.id).collection("vehicles").doc(req.params.plat).set({
+    licenseNumber: vehicle.licenseNumber,
+    vehicleType: vehicle.vehicleType,
+  });
 
   res.status(201).send({"response": "Vehicle Registration success!"});
 });
 
 // edit vehicle
-vehicleApp.put("/vehicles/:id", async (req, res) => {
-  const snapshot = await db.collection("vehicles").doc(req.params.id).get();
-  const snapshotAll = await db.collection("vehicles").get();
+vehicleApp.put("/vehicles/:id/:plat", async (req, res) => {
+  const vehicleData = [];
+  const snapshot = await db.collectionGroup("vehicles").where("licenseNumber", "==", req.params.plat).get();
+  const snapshotAll = await db.collectionGroup("vehicles").get();
   const body = req.body;
 
   const vehicleNewLicense = body.licenseNumber;
@@ -76,7 +85,13 @@ vehicleApp.put("/vehicles/:id", async (req, res) => {
     vehicleLicenseList.push(vehicleData);
   });
 
-  if (!snapshot.exists) {
+  snapshot.forEach((doc) => {
+    const id = doc.id;
+    const data = doc.data();
+    vehicleData.push({id, ...data});
+  });
+
+  if (vehicleData.length === 0) {
     return res.status(404).send({"response": "Vehicle not found!"});
   }
 
@@ -84,22 +99,31 @@ vehicleApp.put("/vehicles/:id", async (req, res) => {
     return res.status(404).send({"response": "License Number Already Used!"});
   }
 
-  await db.collection("vehicles").doc(req.params.id).update(body);
+  const docRef = userDb.doc(req.params.id).collection("vehicles").doc(req.params.plat);
+  await docRef.update(body);
   res.status(200).send({"response": "Vehicle updated!"});
 });
 
 
 // detele vehicle
-vehicleApp.delete("/vehicles/:id", async (req, res) => {
-  const snapshot = await db.collection("vehicles").doc(req.params.id).get();
+vehicleApp.delete("/vehicles/:id/:plat", async (req, res) => {
+  const vehicleData = [];
+  const snapshot = await db.collectionGroup("vehicles").where("licenseNumber", "==", req.params.plat).get();
 
-  const vehicleId = snapshot.id;
-  if (!snapshot.exists) {
+  snapshot.forEach((doc) => {
+    const id = doc.id;
+    const data = doc.data();
+    vehicleData.push({id, ...data});
+  });
+
+  if (vehicleData.length === 0) {
     return res.status(404).send({"response": "Vehicle not found!"});
   }
-  await db.collection("vehicles").doc(req.params.id).delete();
 
-  res.status(200).send({"response": `User deleted with ID: ${vehicleId}`});
+  const docRef = userDb.doc(req.params.id).collection("vehicles").doc(req.params.plat);
+  await docRef.delete();
+
+  res.status(200).send({"response": `Vehicle deleted with number: ${req.params.plat}`});
 });
 
 
