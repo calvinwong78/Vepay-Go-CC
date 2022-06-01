@@ -1,36 +1,48 @@
 import * as functions from 'firebase-functions';
+
 import { connect } from './config';
 
 import { car } from './entity/Vehicle';
-import { Hat } from './entity/backup';
 
 
-export const getcar = functions.https.onRequest(async (request, response) => {
+
+export const getallcar = functions.https.onRequest(async (request, response) => {
 
 
     const connection = await connect();
     const carRepo = connection.getRepository(car);
-
-
-    // Count records
-    // const count = await hippoRepo.count();
-
-    // // Get all 
     const allcar = await carRepo.find();
-
-    // Raw SQL Query
-    // const query = await hippoRepo.query('SELECT name FROM hippo WHERE WEIGHT > 5');
-
-
-    // const hipposWearingHats = await hippoRepo
-    //                             .createQueryBuilder('hippo')
-    //                             .leftJoinAndSelect('hippo.hats', 'hat')
-    //                             .getMany();
-
     response.send(allcar);
 
 });
 
+export const deletecarbyid = functions.https.onRequest(async (request, response) => {
+
+   
+    
+    try {
+        const connection = await connect();
+         await connection.getRepository(car).delete(request.body);
+        response.status(201).send({"response": "delete success! "});
+        
+    } catch (error) {
+        response.send(error)
+    }
+});
+
+/*export const deleteallcar = functions.https.onRequest(async (request, response) => {
+
+
+    try {
+        const connection = await connect();
+         await connection.getRepository(car).delete();
+        response.status(201).send({"response": "delete success! "});
+        
+    } catch (error) {
+        response.send(error)
+    }
+
+});*/
 
 export const createcar = functions.https.onRequest(async (request, response) => {
 
@@ -55,24 +67,45 @@ export const createcar = functions.https.onRequest(async (request, response) => 
     }
 
 });
+/*
+export const updatebyid = functions.https.onRequest(async (request, response) => {
 
-
-export const createHat = functions.https.onRequest(async (request, response) => {
-
-    const { owner, color } = request.body;
 
     try {
         const connection = await connect();
-        const repo = connection.getRepository(Hat);
+        const repo = connection.getRepository(car);
 
-        const newHat = new Hat();
-        newHat.owner = owner;
-        newHat.color = color;
-
-        const savedHat = await repo.save(newHat);
-        response.send(savedHat);
-
+         const post = await repo.findOne(request.body.id);
+         if (post) {
+            repo.merge(post, request.body);
+            const result =  repo.save(post);
+            response.send(result);
+            
+         }
+        
     } catch (error) {
         response.send(error)
     }
-});
+}); 
+*/
+
+
+
+export const updatebyid = functions.https.onRequest(async (request, response) => {
+    
+        try {
+            const connection = await connect();
+        await connection.getRepository(car)
+        .createQueryBuilder()
+        .update(car)
+        .set({ name: request.body.name, VehicleID: request.body.VehicleID })
+        .where("id = :id", { id: request.body.id })
+        .execute()
+        response.status(201).send({"response": "update success! "});
+            
+        } catch (error) {
+            response.send(error)
+        }
+    });
+
+
