@@ -46,7 +46,7 @@ vehicleApp.get("/vehicles/:plat", async (req, res) => {
 });
 
 // register vehicle
-vehicleApp.post("/registration/:id/:plat", async (req, res) => {
+vehicleApp.post("/registration/:id/", async (req, res) => {
   const snapshot = await db.collectionGroup("vehicles").get();
   const vehicle = req.body;
 
@@ -62,7 +62,8 @@ vehicleApp.post("/registration/:id/:plat", async (req, res) => {
     return res.status(404).send({"response": "License Number Already Used!"});
   }
 
-  userDb.doc(req.params.id).collection("vehicles").doc(req.params.plat).set({
+  userDb.doc(req.params.id).collection("vehicles").doc(vehicleNewLicense).set({
+    ownerId: req.params.id,
     licenseNumber: vehicle.licenseNumber,
     vehicleType: vehicle.vehicleType,
   });
