@@ -29,7 +29,6 @@ export const config: ConnectionOptions = {
         },
     })
  }
-
 //  createConnection(config).then()
 
 export const connect = async () => {
@@ -42,9 +41,6 @@ export const connect = async () => {
     } catch(err) {
         connection = await createConnection(config);
     }
-
     return connection;
-
-
 }
 
