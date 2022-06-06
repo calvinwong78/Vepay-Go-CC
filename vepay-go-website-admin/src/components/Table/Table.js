@@ -14,7 +14,7 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
-    console.log("DARI COMPONENTDIDMOUNT");
+    console.log("didmount ");
     console.log(this.props.isDataInput);
     this.getUserData();
   }
@@ -50,12 +50,15 @@ class Table extends React.Component {
       .catch((err) => console.log(err));
   };
 
+
+  
   componentDidUpdate() {
-    console.log("MASUK DARI COMPONENTDIDUPDATE");
+    console.log("didupdate");
     if (this.props.isDataInput) {
       console.log("Masuk ada data input baru");
-      // this.postUserData(this.props.inferenceResult);
       this.getUserData();
+      this.postUserData(this.props.inferenceResult);
+      
     }
   }
 
