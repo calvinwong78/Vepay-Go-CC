@@ -1,7 +1,7 @@
 import { loadGraphModel } from "@tensorflow/tfjs";
 
 const OBJ_DETECTION_MODEL_PATH =
-  "machine_learning_model/license_plate_object_detection_model/model.json";
+  "https://raw.githubusercontent.com/marcellinus-witarsah/VePay-Go-ML/main/license-plate-object-detection/web-models/train_vlpd1_5s_scratch/model.json";
 
 const CHARACTER_RECOGNITION_MODEL_PATH =
   "machine_learning_model/license_plate_object_detection_model/model.json";
