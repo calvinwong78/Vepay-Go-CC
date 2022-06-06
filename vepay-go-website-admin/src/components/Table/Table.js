@@ -7,10 +7,9 @@ class Table extends React.Component {
       dataTable: [],
     };
     this.column = [
-      { heading: "Id", value: "id" },
-      { heading: "Full Name", value: "fullName" },
-      { heading: "E-mail", value: "email" },
-      { heading: "Password", value: "password" },
+      { heading: "LicenseNumber", value: "licenseNumber" },
+      { heading: "Time enter", value: "timeEnter" },
+      { heading: "status", value: "status" },
     ];
   }
 
@@ -32,14 +31,18 @@ class Table extends React.Component {
       .catch((err) => console.log(err));
   };
 
-  postUserData = () => {
+  postUserData = (licenseNumber) => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+
     const jsonData = {
-      email: "jtesttasdasdestasdasdasdas.com",
-      password: "test",
-      fullName: "marcell terbaru abis input data",
+      licenseNumber: licenseNumber,
     }
+
     axios
-      .post(this.props.postUserDataUrl, {jsonData})
+      .post(this.props.postUserDataUrl, jsonData, {headers: headers})
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -51,7 +54,7 @@ class Table extends React.Component {
     console.log("MASUK DARI COMPONENTDIDUPDATE");
     if (this.props.isDataInput) {
       console.log("Masuk ada data input baru");
-      this.postUserData();
+      // this.postUserData(this.props.inferenceResult);
       this.getUserData();
     }
   }
