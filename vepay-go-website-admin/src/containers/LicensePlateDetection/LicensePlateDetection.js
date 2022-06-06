@@ -6,7 +6,7 @@ import Camera from "../../components/Camera/Camera";
 import Canvas from "../../components/Canvas/Canvas";
 import * as Constants from "../../constants";
 import Table from "../../components/Table/Table";
-import InferenceResult from "../../components/InferenceResult/InferenceResult";
+// import InferenceResult from "../../components/InferenceResult/InferenceResult";
 import axios from "axios";
 tf.setBackend("webgl");
 
@@ -493,11 +493,11 @@ class LicensePlateDetection extends React.Component {
           </div>
           <div className="inference-result">
             <h2 style={{ textAlign: "center" }}>Information</h2>
-            <InferenceResult
+            {/* <InferenceResult
               inferenceResult={this.state.inferenceResult}
               isDataInput={this.state.isDataInput}
               licensePlatePicture={<Canvas canvasRef={this.canvasOutputRef} />}
-            />
+            /> */}
           </div>
           <div className="vehicle-parking-logs">
             <h2 style={{ textAlign: "center" }}>Vehicle Parking Logs</h2>
