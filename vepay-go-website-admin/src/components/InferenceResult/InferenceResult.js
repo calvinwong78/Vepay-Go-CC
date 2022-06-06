@@ -3,20 +3,27 @@ class InferenceResult extends React.Component {
   constructor() {
     super();
     let today = new Date();
-    let date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-
-    let time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-    this.state = {
-      currentDate: date,
-      currentTime: time,
-    };
+    if (this.props.isDataInput){
+      let date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+  
+      let time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      this.state = {
+        currentDate: date,
+        currentTime: time,
+      };
+    }
+    else{
+      this.state = {
+        currentDate: "",
+        currentTime: "",
+      };
+    }
   }
   render() {
     return (

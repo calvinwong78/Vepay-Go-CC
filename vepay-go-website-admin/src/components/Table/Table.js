@@ -31,14 +31,16 @@ class Table extends React.Component {
       .catch((err) => console.log(err));
   };
 
-  postUserData = () => {
+  postUserData = (licenseNumber) => {
     const headers = {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     };
+
     const jsonData = {
-      licenseNumber: "B5122ABI",
+      licenseNumber: licenseNumber,
     }
+
     axios
       .post(this.props.postUserDataUrl, jsonData, {headers: headers})
       .then((res) => {
@@ -52,7 +54,7 @@ class Table extends React.Component {
     console.log("MASUK DARI COMPONENTDIDUPDATE");
     if (this.props.isDataInput) {
       console.log("Masuk ada data input baru");
-      this.postUserData();
+      // this.postUserData(this.props.inferenceResult);
       this.getUserData();
     }
   }

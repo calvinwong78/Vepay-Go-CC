@@ -7,6 +7,7 @@ import Canvas from "../../components/Canvas/Canvas";
 import * as Constants from "../../constants";
 import Table from "../../components/Table/Table";
 import InferenceResult from "../../components/InferenceResult/InferenceResult";
+import axios from "axios";
 tf.setBackend("webgl");
 
 class LicensePlateDetection extends React.Component {
@@ -22,6 +23,7 @@ class LicensePlateDetection extends React.Component {
       nextObjectId: 0,
       currentImage: null,
       isDataInput: false,
+      inferenceResult: "",
     };
     // Setting up refs
     this.videoRef = React.createRef();
@@ -319,11 +321,29 @@ class LicensePlateDetection extends React.Component {
       });
     // function hans
     // function bintang
+
+    // console.log(data["regionOfInterestArr"]);
+    const body = { "license-plate": data["regionOfInterestArr"] };
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    // post data to machine learning python service (Google App Angine)
+    axios
+      .post("https://vepay-go.uc.r.appspot.com/character-segmentation", body, {
+        headers: headers,
+      })
+      .then((response) => {
+        // update the inference result
+        this.setState({
+          inferenceResult: response.data["prediction"],
+        });
+      });
+
     this.setState({
       isDataInput: true,
     });
 
-    // console.log(data["regionOfInterestArr"]);
   };
 
   update = (valid_detections_data) => {
@@ -459,19 +479,6 @@ class LicensePlateDetection extends React.Component {
 
   render() {
     return (
-      // <div>
-      // <h2>Camera</h2>
-      // <div className="license-plate-detection-container">
-      //   <Camera className={"camera"} videoRef={this.videoRef} />
-      //   <Canvas className={"canvas"} canvasRef={this.canvasAnnotRef} />
-      //   <div>
-      //     <Canvas
-      //       canvasRef={this.canvasOutputRef}
-      //       style={{ position: "fixed" }}
-      //     />
-      //   </div>
-      // </div>
-      // </div>
       <div>
         <div className="liveheader">
           <h1>Live Camera Feed</h1>
@@ -487,7 +494,8 @@ class LicensePlateDetection extends React.Component {
           <div className="inference-result">
             <h2 style={{ textAlign: "center" }}>Information</h2>
             <InferenceResult
-              inferenceResult={"B1912BFF"}
+              inferenceResult={this.state.inferenceResult}
+              isDataInput={this.state.isDataInput}
               licensePlatePicture={<Canvas canvasRef={this.canvasOutputRef} />}
             />
           </div>
@@ -500,6 +508,7 @@ class LicensePlateDetection extends React.Component {
               postUserDataUrl={
                 "https://us-central1-vepay-go.cloudfunctions.net/transaction/transactions"
               }
+              inferenceResult={this.state.inferenceResult}
               isDataInput={this.state.isDataInput}
             />
           </div>
