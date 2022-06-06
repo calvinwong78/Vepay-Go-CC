@@ -46,8 +46,10 @@ transApp.get("/transactions/:id", async (req, res) => {
 
 // Post transaction
 transApp.post("/transactions", async (req, res) => {
+  const transactionData = [];
   const transaction = req.body;
   const snapshotVehicle = await db.collectionGroup("vehicles").where("licenseNumber", "==", transaction.licenseNumber).get();
+  const snapshotTransaction = await db.collection("transactions").where("licenseNumber", "==", transaction.licenseNumber).where("status", "==", "inside").get();
   const today = new Date();
   const date = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
   const yearEnter = today.getFullYear();
@@ -66,6 +68,15 @@ transApp.post("/transactions", async (req, res) => {
     ownerId = data.ownerId;
     vehicleData.push(data);
   });
+
+  snapshotTransaction.forEach((doc) => {
+    const data = doc.data();
+    transactionData.push(data);
+  });
+
+  if (transactionData.length > 0) {
+    return res.status(404).send({"response": "Vehicle already inside!"});
+  }
 
   if (vehicleData.length === 0) {
     return res.status(404).send({"response": "Vehicle not found!"});

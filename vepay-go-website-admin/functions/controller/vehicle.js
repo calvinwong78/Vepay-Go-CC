@@ -46,7 +46,7 @@ vehicleApp.get("/vehicles/:plat", async (req, res) => {
 });
 
 // register vehicle
-vehicleApp.post("/registration/:id/", async (req, res) => {
+vehicleApp.post("/registration/:id", async (req, res) => {
   const snapshot = await db.collectionGroup("vehicles").get();
   const vehicle = req.body;
 
@@ -62,7 +62,7 @@ vehicleApp.post("/registration/:id/", async (req, res) => {
     return res.status(404).send({"response": "License Number Already Used!"});
   }
 
-  userDb.doc(req.params.id).collection("vehicles").doc(vehicleNewLicense).set({
+  userDb.doc(req.params.id).collection("vehicles").add({
     ownerId: req.params.id,
     licenseNumber: vehicle.licenseNumber,
     vehicleType: vehicle.vehicleType,
@@ -72,7 +72,7 @@ vehicleApp.post("/registration/:id/", async (req, res) => {
 });
 
 // edit vehicle
-vehicleApp.put("/vehicles/:id/:plat", async (req, res) => {
+vehicleApp.put("/vehicles/:plat", async (req, res) => {
   const vehicleData = [];
   const snapshot = await db.collectionGroup("vehicles").where("licenseNumber", "==", req.params.plat).get();
   const snapshotAll = await db.collectionGroup("vehicles").get();
@@ -87,9 +87,8 @@ vehicleApp.put("/vehicles/:id/:plat", async (req, res) => {
   });
 
   snapshot.forEach((doc) => {
-    const id = doc.id;
     const data = doc.data();
-    vehicleData.push({id, ...data});
+    vehicleData.push(data);
   });
 
   if (vehicleData.length === 0) {
@@ -100,14 +99,16 @@ vehicleApp.put("/vehicles/:id/:plat", async (req, res) => {
     return res.status(404).send({"response": "License Number Already Used!"});
   }
 
-  const docRef = userDb.doc(req.params.id).collection("vehicles").doc(req.params.plat);
-  await docRef.update(body);
+  snapshot.forEach(function(document) {
+    document.ref.update(body);
+  });
+
   res.status(200).send({"response": "Vehicle updated!"});
 });
 
 
 // detele vehicle
-vehicleApp.delete("/vehicles/:id/:plat", async (req, res) => {
+vehicleApp.delete("/vehicles/:plat", async (req, res) => {
   const vehicleData = [];
   const snapshot = await db.collectionGroup("vehicles").where("licenseNumber", "==", req.params.plat).get();
 
@@ -121,8 +122,9 @@ vehicleApp.delete("/vehicles/:id/:plat", async (req, res) => {
     return res.status(404).send({"response": "Vehicle not found!"});
   }
 
-  const docRef = userDb.doc(req.params.id).collection("vehicles").doc(req.params.plat);
-  await docRef.delete();
+  snapshot.forEach(function(document) {
+    document.ref.delete();
+  });
 
   res.status(200).send({"response": `Vehicle deleted with number: ${req.params.plat}`});
 });
