@@ -6,14 +6,13 @@ import Camera from "../../components/Camera/Camera";
 import Canvas from "../../components/Canvas/Canvas";
 import * as Constants from "../../constants";
 import Table from "../../components/Table/Table";
-// import InferenceResult from "../../components/InferenceResult/InferenceResult";
+import InferenceResult from "../../components/InferenceResult/InferenceResult";
 import axios from "axios";
 tf.setBackend("webgl");
 
 class LicensePlateDetection extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     // Setting up states
     this.state = {
       objects: {},
@@ -25,6 +24,7 @@ class LicensePlateDetection extends React.Component {
       isDataInput: false,
       inferenceResult: "",
     };
+    console.log("test ", this.state.isDataInput)
     // Setting up refs
     this.videoRef = React.createRef();
     this.canvasAnnotRef = React.createRef();
@@ -69,10 +69,6 @@ class LicensePlateDetection extends React.Component {
     }
   }
   componentDidUpdate() {
-    // console.log("updates");
-    // console.log("objects = ", this.state.objects);
-    // console.log("countSamePosition = ", this.state.countSamePosition);
-    // console.log("disappeared = ", this.state.disappeared);
     if (this.state.isDataInput === true) {
       this.setState({
         isDataInput: false,
@@ -321,6 +317,9 @@ class LicensePlateDetection extends React.Component {
       });
     // function hans
     // function bintang
+    this.setState({
+      isDataInput: true,
+    });
 
     // console.log(data["regionOfInterestArr"]);
     const body = { "license-plate": data["regionOfInterestArr"] };
@@ -339,10 +338,6 @@ class LicensePlateDetection extends React.Component {
           inferenceResult: response.data["prediction"],
         });
       });
-
-    this.setState({
-      isDataInput: true,
-    });
 
   };
 
@@ -493,11 +488,12 @@ class LicensePlateDetection extends React.Component {
           </div>
           <div className="inference-result">
             <h2 style={{ textAlign: "center" }}>Information</h2>
-            {/* <InferenceResult
+            <InferenceResult
               inferenceResult={this.state.inferenceResult}
               isDataInput={this.state.isDataInput}
-              licensePlatePicture={<Canvas canvasRef={this.canvasOutputRef} />}
-            /> */}
+              licensePlatePicture={<Canvas canvasRef={this.canvasOutputRef}
+            />}
+            />
           </div>
           <div className="vehicle-parking-logs">
             <h2 style={{ textAlign: "center" }}>Vehicle Parking Logs</h2>
