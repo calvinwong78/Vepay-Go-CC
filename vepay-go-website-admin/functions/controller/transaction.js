@@ -50,16 +50,7 @@ transApp.post("/transactions", async (req, res) => {
   const transaction = req.body;
   const snapshotVehicle = await db.collectionGroup("vehicles").where("licenseNumber", "==", transaction.licenseNumber).get();
   const snapshotTransaction = await db.collection("transactions").where("licenseNumber", "==", transaction.licenseNumber).where("status", "==", "inside").get();
-  const today = new Date();
-  const date = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-  const yearEnter = today.getFullYear();
-  const monthEnter = (today.getMonth()+1);
-  const dateEnter = today.getDate();
-
-  const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  const hoursEnter = today.getHours();
-  const minutesEnter = today.getMinutes();
-  const secondsEnter = today.getSeconds();
+  const today = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
 
   const vehicleData = [];
   let ownerId;
@@ -86,22 +77,8 @@ transApp.post("/transactions", async (req, res) => {
   db.collection("transactions").add({
     ownerId: ownerId,
     licenseNumber: transaction.licenseNumber,
-    fullDateEnter: date,
-    yearEnter: yearEnter,
-    monthEnter: monthEnter,
-    dateEnter: dateEnter,
-    timeEnter: time,
-    hoursEnter: hoursEnter,
-    minutesEnter: minutesEnter,
-    secondsEnter: secondsEnter,
+    fullDateEnter: today,
     fullDateOut: "-",
-    yearOut: "-",
-    monthOut: "-",
-    dateOut: "-",
-    timeOut: "-",
-    hoursOut: "-",
-    minutesOut: "-",
-    secondsOut: "-",
     price: "-",
     status: "inside",
   });
@@ -115,31 +92,10 @@ transApp.put("/transactions", async (req, res) => {
   const transaction = req.body;
   const snapshot = await db.collection("transactions").where("licenseNumber", "==", transaction.licenseNumber).where("status", "==", "inside").get();
 
-  const today = new Date();
-  const date = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-  const yearOut = today.getFullYear();
-  const monthOut = (today.getMonth()+1);
-  const dateOut = today.getDate();
+  const today = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
 
-  const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  const hoursOut = today.getHours();
-  const minutesOut = today.getMinutes();
-  const secondsOut = today.getSeconds();
-
-  // let dateEnter = "";
-  // let yearEnter = "";
-  // let monthEnter = "";
-
-  // let hoursEnter = "";
-  // let minutesEnter = "";
   snapshot.forEach((doc) => {
     const data = doc.data();
-    // dateEnter = data.dateEnter;
-    // yearEnter = data.yearEnter;
-    // monthEnter = data.monthEnter;
-
-    // hoursEnter = data.hoursEnter;
-    // minutesEnter = data.minutesEnter;
     vehicleData.push(data);
   });
 
@@ -148,32 +104,10 @@ transApp.put("/transactions", async (req, res) => {
   }
 
   const price = 5000;
-  // const maxPrice = 10000;
-
-  // if (dateOut - dateEnter > 0 || yearOut - yearEnter > 0 || monthOut - monthEnter > 0) {
-  //   price = maxPrice;
-  // } else {
-  //   const hourInMinutes = (hoursOut-hoursEnter)*60;
-  //   const totalMinutes = minutesOut-minutesEnter;
-  //   if (hourInMinutes < 0 || totalMinutes < 60) {
-  //     return price = 2000;
-  //   }
-  //   price = 2000 + ((hoursOut-hoursEnter)*1000);
-  //   if (price > 10000) {
-  //     price = maxPrice;
-  //   }
-  // }
 
   snapshot.forEach(function(document) {
     document.ref.update({
-      fullDateOut: date,
-      yearOut: yearOut,
-      monthOut: monthOut,
-      dateOut: dateOut,
-      timeOut: time,
-      hoursOut: hoursOut,
-      minutesOut: minutesOut,
-      secondsOut: secondsOut,
+      fullDateOut: today,
       price: price,
       status: "finished",
     });
