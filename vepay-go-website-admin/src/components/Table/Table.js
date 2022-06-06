@@ -7,10 +7,9 @@ class Table extends React.Component {
       dataTable: [],
     };
     this.column = [
-      { heading: "Id", value: "id" },
-      { heading: "Full Name", value: "fullName" },
-      { heading: "E-mail", value: "email" },
-      { heading: "Password", value: "password" },
+      { heading: "LicenseNumber", value: "licenseNumber" },
+      { heading: "Time enter", value: "timeEnter" },
+      { heading: "status", value: "status" },
     ];
   }
 
@@ -33,13 +32,15 @@ class Table extends React.Component {
   };
 
   postUserData = () => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
     const jsonData = {
-      email: "jtesttasdasdestasdasdasdas.com",
-      password: "test",
-      fullName: "marcell terbaru abis input data",
+      licenseNumber: "B5122ABI",
     }
     axios
-      .post(this.props.postUserDataUrl, {jsonData})
+      .post(this.props.postUserDataUrl, jsonData, {headers: headers})
       .then((res) => {
         console.log(res);
         console.log(res.data);

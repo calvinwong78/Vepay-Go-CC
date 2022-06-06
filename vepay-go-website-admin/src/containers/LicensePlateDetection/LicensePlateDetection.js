@@ -488,7 +488,6 @@ class LicensePlateDetection extends React.Component {
             <h2 style={{ textAlign: "center" }}>Information</h2>
             <InferenceResult
               inferenceResult={"B1912BFF"}
-              location={"Senayan City Mall"}
               licensePlatePicture={<Canvas canvasRef={this.canvasOutputRef} />}
             />
           </div>
@@ -496,10 +495,10 @@ class LicensePlateDetection extends React.Component {
             <h2 style={{ textAlign: "center" }}>Vehicle Parking Logs</h2>
             <Table
               getUserDataUrl={
-                "https://us-central1-vepay-go.cloudfunctions.net/user/users"
+                "https://us-central1-vepay-go.cloudfunctions.net/transaction/transactions"
               }
               postUserDataUrl={
-                "https://us-central1-vepay-go.cloudfunctions.net/user/registration"
+                "https://us-central1-vepay-go.cloudfunctions.net/transaction/transactions"
               }
               isDataInput={this.state.isDataInput}
             />
