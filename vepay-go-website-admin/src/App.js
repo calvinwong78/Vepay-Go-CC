@@ -1,4 +1,3 @@
-import './assets/Styles/Camera.css';
 import LicensePlateDetection from './containers/LicensePlateDetection/LicensePlateDetection';
 
 function App() {

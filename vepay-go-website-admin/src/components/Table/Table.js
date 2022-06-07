@@ -14,7 +14,6 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
-    console.log("didmount ");
     console.log(this.props.isDataInput);
     this.getUserData();
   }

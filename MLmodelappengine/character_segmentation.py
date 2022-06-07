@@ -85,7 +85,7 @@ def detect_chars(img, showSteps=False):
         if w > 5 and h > 10 and x > 0 and x < 280 and y > 0 and y < 60:
             cv2.rectangle(new_mask, (x, y), (x+w, y+h), (0, 0, 0), 3)
             char = np.array(mask[y:y+h, x:x+w], np.uint8)
-            char_resize = cv2.resize(char, (100, 75))
+            char_resize = cv2.resize(char, (64, 64))
             detected_char_list.append(char_resize)
 
     return detected_char_list

@@ -10,7 +10,7 @@ def index():
     data=request.get_json()
     # get the image which is in pixels
     np_data = np.array(data["license-plate"])
-    model = prepare_model(model_path='./binary_model_multi_dropout.h5')
+    model = prepare_model(model_path='./model.h5')
     data_for_prediction = detect_chars(img=np_data)
     characters = predict_characters(model=model, data=data_for_prediction)
     print(characters)
