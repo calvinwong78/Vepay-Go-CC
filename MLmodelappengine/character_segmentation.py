@@ -1,43 +1,44 @@
 import cv2
 import numpy as np
-import functools
 from pathlib import Path
 import os
 import tensorflow as tf
+import shutil
+
+width = 400
+height = 220
 
 
-def detect_chars(img, showSteps=False):
+def detect_chars(imag, showSteps=False):
     """
     This function will receive an argument img which is an array of pixels which will be
     processed and return array of character
     """
-    image = np.array(img, np.uint8)
-    image = cv2.resize(image, (300, 120))
-    pic_format = "resize.jpg"
-    path = os.path.join(Path().absolute(), "detected_chars")
-    cv2.imwrite(os.path.join(path, pic_format), image)
+    
+    image = np.array(imag, np.uint8)
+    image = cv2.resize(image, (width, height))
+
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    pic_format = "resize_gray.jpg"
-    path = os.path.join(Path().absolute(), "detected_chars")
-    cv2.imwrite(os.path.join(path, pic_format), gray)
 
     gray = 255-gray
     gray = cv2.bilateralFilter(gray, 11, 17, 17)
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     thresh = cv2.adaptiveThreshold(
-        blurred, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 21)
+        blurred, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 37, 25)
 
     thresh = cv2.erode(thresh, (3, 3))
     thresh = cv2.dilate(thresh, (3, 3))
     thresh = cv2.dilate(thresh, (3, 3))
     thresh = cv2.erode(thresh, (3, 3))
+
     _, labels = cv2.connectedComponents(thresh)
 
     mask = np.zeros(thresh.shape, dtype="uint8")
+
     # Set lower bound and upper bound criteria for characters
     total_pixels = image.shape[0] * image.shape[1]
-    lower = total_pixels // 300  # heuristic param, can be fine tuned if necessary
-    upper = total_pixels // 2  # heuristic param, can be fine tuned if necessary
+    lower = total_pixels // 200  # heuristic param, can be fine tuned if necessary
+    upper = total_pixels // 20  # heuristic param, can be fine tuned if necessary
     # Loop over the unique components
     for (i, label) in enumerate(np.unique(labels)):
         # If this is the background label, ignore it
@@ -54,41 +55,143 @@ def detect_chars(img, showSteps=False):
         # add it to our mask
         if numPixels > lower and numPixels < upper:
             mask = cv2.add(mask, labelMask)
+
+
     if showSteps == True:
         cv2.imshow("thresh", thresh)
         cv2.imshow("gray", gray)
         cv2.imshow("mask", mask)
-
     # Find contours and get bounding box for each contour
     cnts, _ = cv2.findContours(
         mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     boundingBoxes = [cv2.boundingRect(c) for c in cnts]
 
-    # # Sort the bounding boxes from left to right, top to bottom
-    # # sort by Y first, and then sort by X if Ys are similar
-    def compare(rect1, rect2):
-        if abs(rect1[1] - rect2[1]) > 10:
-            return rect1[1] - rect2[1]
-        else:
-            return rect1[0] - rect2[0]
+    def takeXelement(elem):
+        return elem[0]
+    boundingBoxes.sort(key=takeXelement)
 
-    boundingBoxes = sorted(boundingBoxes, key=functools.cmp_to_key(compare))
     detected_char_list = []
     new_mask = mask.copy()
+    i = 0
     for c in boundingBoxes:
         x, y, w, h = c
-        x = x-2
-        y = y-2
-        w = w+2
-        h = h+2
-        if w > 5 and h > 10 and x > 0 and x < 280 and y > 0 and y < 60:
+        # check if x, y, w, h are out of bounds
+        x = x-5
+        if x < 0:
+            x = 0
+
+        y = y-5
+        if y < 0:
+            y = 0
+
+        w = w+5
+        if x+w > width:
+            w = width-x
+        
+        h = h+5
+        if y+h > height:
+            h = height-y
+
+        if x > 5 and x < 395 and y > 10 and y < 210 and h > 70 and h < 200 and w < 100:
             cv2.rectangle(new_mask, (x, y), (x+w, y+h), (0, 0, 0), 3)
-            char = np.array(mask[y:y+h, x:x+w], np.uint8)
+            char = np.array(new_mask[y:y+h, x:x+w], np.uint8)
             char_resize = cv2.resize(char, (64, 64))
             detected_char_list.append(char_resize)
 
     return detected_char_list
+
+# import cv2
+# import numpy as np
+# import functools
+# from pathlib import Path
+# import os
+# import tensorflow as tf
+
+
+# def detect_chars(img, showSteps=False):
+#     """
+#     This function will receive an argument img which is an array of pixels which will be
+#     processed and return array of character
+#     """
+#     image = np.array(img, np.uint8)
+#     image = cv2.resize(image, (300, 120))
+#     pic_format = "resize.jpg"
+#     path = os.path.join(Path().absolute(), "detected_chars")
+#     cv2.imwrite(os.path.join(path, pic_format), image)
+#     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+#     pic_format = "resize_gray.jpg"
+#     path = os.path.join(Path().absolute(), "detected_chars")
+#     cv2.imwrite(os.path.join(path, pic_format), gray)
+
+#     gray = 255-gray
+#     gray = cv2.bilateralFilter(gray, 11, 17, 17)
+#     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+#     thresh = cv2.adaptiveThreshold(
+#         blurred, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 25, 25)
+
+#     thresh = cv2.erode(thresh, (3, 3))
+#     thresh = cv2.dilate(thresh, (3, 3))
+#     thresh = cv2.dilate(thresh, (3, 3))
+#     thresh = cv2.erode(thresh, (3, 3))
+#     _, labels = cv2.connectedComponents(thresh)
+
+#     mask = np.zeros(thresh.shape, dtype="uint8")
+#     # Set lower bound and upper bound criteria for characters
+#     total_pixels = image.shape[0] * image.shape[1]
+#     lower = total_pixels // 300  # heuristic param, can be fine tuned if necessary
+#     upper = total_pixels // 2  # heuristic param, can be fine tuned if necessary
+#     # Loop over the unique components
+#     for (i, label) in enumerate(np.unique(labels)):
+#         # If this is the background label, ignore it
+#         if label == 0:
+#             continue
+
+#         # Otherwise, construct the label mask to display only connected component
+#         # for the current label
+#         labelMask = np.zeros(thresh.shape, dtype="uint8")
+#         labelMask[labels == label] = 255
+#         numPixels = cv2.countNonZero(labelMask)
+
+#         # If the number of pixels in the component is between lower bound and upper bound,
+#         # add it to our mask
+#         if numPixels > lower and numPixels < upper:
+#             mask = cv2.add(mask, labelMask)
+#     if showSteps == True:
+#         cv2.imshow("thresh", thresh)
+#         cv2.imshow("gray", gray)
+#         cv2.imshow("mask", mask)
+
+#     # Find contours and get bounding box for each contour
+#     cnts, _ = cv2.findContours(
+#         mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+#     boundingBoxes = [cv2.boundingRect(c) for c in cnts]
+
+#     # # Sort the bounding boxes from left to right, top to bottom
+#     # # sort by Y first, and then sort by X if Ys are similar
+#     def compare(rect1, rect2):
+#         if abs(rect1[1] - rect2[1]) > 10:
+#             return rect1[1] - rect2[1]
+#         else:
+#             return rect1[0] - rect2[0]
+
+#     boundingBoxes = sorted(boundingBoxes, key=functools.cmp_to_key(compare))
+#     detected_char_list = []
+#     new_mask = mask.copy()
+#     for c in boundingBoxes:
+#         x, y, w, h = c
+#         x = x-2
+#         y = y-2
+#         w = w+2
+#         h = h+2
+#         if w > 5 and h > 10 and x > 0 and x < 280 and y > 0 and y < 60:
+#             cv2.rectangle(new_mask, (x, y), (x+w, y+h), (0, 0, 0), 3)
+#             char = np.array(mask[y:y+h, x:x+w], np.uint8)
+#             char_resize = cv2.resize(char, (64, 64))
+#             detected_char_list.append(char_resize)
+
+#     return detected_char_list
 
 # import the model
 def prepare_model(model_path):
@@ -99,6 +202,8 @@ def prepare_model(model_path):
     return imported_model
 
 # predict using the model and data
+
+
 def predict_characters(model, data):
     """
     This function will receive an argument model which will be used for predicting and 
@@ -116,5 +221,5 @@ def predict_characters(model, data):
         print(classes)
         index = int(np.argmax(classes))
         characters += dictionary[index]
-    
+
     return characters

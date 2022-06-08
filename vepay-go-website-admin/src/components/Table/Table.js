@@ -14,7 +14,6 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.isDataInput);
     this.getUserData();
   }
 
@@ -38,10 +37,10 @@ class Table extends React.Component {
 
     const jsonData = {
       licenseNumber: licenseNumber,
-    }
+    };
 
     axios
-      .post(this.props.postUserDataUrl, jsonData, {headers: headers})
+      .post(this.props.postUserDataUrl, jsonData, { headers: headers })
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -49,15 +48,11 @@ class Table extends React.Component {
       .catch((err) => console.log(err));
   };
 
-
-  
   componentDidUpdate() {
     console.log("didupdate");
     if (this.props.isDataInput) {
-      console.log("Masuk ada data input baru");
-      this.getUserData();
       this.postUserData(this.props.inferenceResult);
-      
+      this.getUserData();
     }
   }
 

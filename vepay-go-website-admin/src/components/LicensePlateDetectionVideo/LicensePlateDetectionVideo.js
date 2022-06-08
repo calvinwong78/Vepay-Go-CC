@@ -6,9 +6,7 @@ import * as Constants from "../../constants";
 import axios from "axios";
 import "./LicensePlateDetectionVideo.css";
 
-
 class LicensePlateDetectionVideo extends Component {
-
   // invoke as soon as the compoenents is mounted (inserted to the tree)
   componentDidMount() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -45,7 +43,7 @@ class LicensePlateDetectionVideo extends Component {
         });
     }
   }
-  
+
   componentDidUpdate() {
     if (this.props.parentState.isDataReceived === true) {
       this.props.setIsDataReceived(false);
@@ -79,7 +77,7 @@ class LicensePlateDetectionVideo extends Component {
       // result shape: [height, width, channels]
 
       // update the image
-      this.props.setCurrentImage(image)
+      this.props.setCurrentImage(image);
 
       // resize and normalized image expand the dimension by 1 so that
       // it can be input to the object detection model
@@ -95,12 +93,12 @@ class LicensePlateDetectionVideo extends Component {
   renderPredictions = (predictions) => {
     // get canvas element and resize according to camera size\
     // so that it the annotation will fit perfectly
-    const canvas =  this.props.canvasAnnotRef.current;
-    canvas.width =  this.props.videoRef.current.offsetWidth;
-    canvas.height =  this.props.videoRef.current.offsetHeight;
+    const canvas = this.props.canvasAnnotRef.current;
+    canvas.width = this.props.videoRef.current.offsetWidth;
+    canvas.height = this.props.videoRef.current.offsetHeight;
 
     // get context for drawing
-    const ctx =  this.props.canvasAnnotRef.current.getContext("2d");
+    const ctx = this.props.canvasAnnotRef.current.getContext("2d");
 
     // console.log(this.videoRef.current.width, this.videoRef.current.height);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -128,7 +126,7 @@ class LicensePlateDetectionVideo extends Component {
     this.update(valid_detections_data);
 
     valid_detections_data.forEach((item) => {
-      const ctx =  this.props.canvasAnnotRef.current.getContext("2d");
+      const ctx = this.props.canvasAnnotRef.current.getContext("2d");
       this.drawBoundingBox(item, ctx);
       this.drawText(item, ctx);
     });
@@ -221,14 +219,17 @@ class LicensePlateDetectionVideo extends Component {
       centerY: data["centerY"],
       regionOfInterestArr: data["regionOfInterestArr"],
     };
-    this.props.prevObject.current = copyObjects[this.props.parentState.nextObjectId];
+    this.props.prevObject.current =
+      copyObjects[this.props.parentState.nextObjectId];
 
     // add disappeared
     const copyDisappeared = { ...this.props.parentState.disappeared };
     copyDisappeared[this.props.parentState.nextObjectId] = 0;
 
     // add disappeared
-    const copyCountSamePosition = { ...this.props.parentState.countSamePosition };
+    const copyCountSamePosition = {
+      ...this.props.parentState.countSamePosition,
+    };
     copyCountSamePosition[this.props.parentState.nextObjectId] = 0;
 
     this.props.setNextObjectId();
@@ -257,7 +258,6 @@ class LicensePlateDetectionVideo extends Component {
 
     this.props.setObjects(copyObjects);
     this.props.setDisappeared(copyDisappeared);
-
   };
 
   removeObj = (objectId) => {
@@ -270,7 +270,9 @@ class LicensePlateDetectionVideo extends Component {
     const copyDisappeared = { ...this.props.parentState.disappeared };
     delete copyDisappeared[objectId];
 
-    const copyCountSamePosition = { ...this.props.parentState.countSamePosition };
+    const copyCountSamePosition = {
+      ...this.props.parentState.countSamePosition,
+    };
     delete copyCountSamePosition[objectId];
 
     this.props.setObjects(copyObjects);
@@ -288,7 +290,6 @@ class LicensePlateDetectionVideo extends Component {
     // function hans
     // function bintang
 
-    this.props.setIsDataReceived(true)
 
     // send data to flask
     // fetch
@@ -299,13 +300,16 @@ class LicensePlateDetectionVideo extends Component {
       "Content-Type": "application/json",
     };
     axios
-      .post("http://localhost:5000", body, {
+      .post("https://vepay-go.uc.r.appspot.com", body, {
         headers: headers,
       })
       .then((response) => {
         // update the inference result
         this.props.setInferenceResult(response.data["prediction"]);
+        this.props.setIsDataReceived(true);
       });
+    
+    
     // axios
     //   .post("https://vepay-go.uc.r.appspot.com", body, {
     //     headers: headers,
@@ -337,7 +341,9 @@ class LicensePlateDetectionVideo extends Component {
       inputData.push(this.extractData(item));
     }
 
-    let countExistingObjects = Object.keys(this.props.parentState.objects).length;
+    let countExistingObjects = Object.keys(
+      this.props.parentState.objects
+    ).length;
 
     // check if current obejcts are emtpy
     // if "true" than all of the detected objects are still
@@ -380,7 +386,9 @@ class LicensePlateDetectionVideo extends Component {
               currObject
             ) < 30
           ) {
-            let copyCountSamePosition = { ...this.props.parentState.countSamePosition };
+            let copyCountSamePosition = {
+              ...this.props.parentState.countSamePosition,
+            };
             copyCountSamePosition[key]++;
             this.props.setCountSamePosition(copyCountSamePosition);
             if (
@@ -397,38 +405,42 @@ class LicensePlateDetectionVideo extends Component {
 
   extractData = (item) => {
     let x = parseInt(item["bbox"][0].toFixed(0));
-    // x -= 5;
+    x -= 5;
     // check of the coordinate out of box or not
     if (x < 0) {
       x = 0;
     }
+    console.log("x = ", x);
 
     let y = parseInt(item["bbox"][1].toFixed(0));
     // check of the coordinate out of box or not
-    // y -= 5;
+    // y -= 20;
     if (y < 0) {
       y = 0;
     }
 
+    console.log("y = ", y);
 
     let width = parseInt(item["bbox"][2].toFixed(0));
-    // width += 10;
-    if (x + width >  this.props.videoRef.current.offsetWidth) {
-      width =  this.props.videoRef.current.offsetWidth - x;
+    width += 10;
+    if (x + width > this.props.videoRef.current.offsetWidth) {
+      width = this.props.videoRef.current.offsetWidth - x;
     }
+    console.log("width = ", this.props.videoRef.current.offsetWidth);
 
     let height = parseInt(item["bbox"][3].toFixed(0));
-    // height += 10;
+    // height += 40;
 
-    if (y + height >  this.props.videoRef.current.offsetHeight) {
-      height =  this.props.videoRef.current.offsetHeight - y;
+    if (y + height > this.props.videoRef.current.offsetHeight) {
+      height = this.props.videoRef.current.offsetHeight - y;
     }
+    console.log("height = ", this.props.videoRef.current.offsetHeight);
 
     let centerX = x + width / 2.0;
     let centerY = y + height / 2.0;
 
     const image = this.props.parentState.currentImage;
-    console.log(image.shape)
+    console.log(image.shape);
     const startingPoint = [y, x, 0];
     const newSize = [height, width, 3];
     const regionOfInterest = tf.slice(image, startingPoint, newSize);
@@ -448,8 +460,8 @@ class LicensePlateDetectionVideo extends Component {
       <div className="video-container" id="video-container">
         <h2 style={{ textAlign: "center" }}>Camera</h2>
         <div className="license-plate-detection-container">
-          <Camera className={"camera"} videoRef={ this.props.videoRef} />
-          <Canvas className={"canvas"} canvasRef={ this.props.canvasAnnotRef} />
+          <Camera className={"camera"} videoRef={this.props.videoRef} />
+          <Canvas className={"canvas"} canvasRef={this.props.canvasAnnotRef} />
         </div>
       </div>
     );

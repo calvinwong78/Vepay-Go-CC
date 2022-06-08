@@ -7,6 +7,8 @@ import ToggleSwitchButton from "../../components/ToggleSwitchButton/ToggleSwitch
 import LicensePlateDetectionImage from "../../components/LicensePlateDetectionImage/LicensePlateDetectionImage";
 import * as Constants from "../../constants";
 import * as tf from "@tensorflow/tfjs";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 class LicensePlateDetection extends React.Component {
   constructor(props) {
@@ -40,7 +42,7 @@ class LicensePlateDetection extends React.Component {
   }
 
   // reset state except model and typeDataInput
-  resetState = () => {
+  reset = () => {
     this.setState({
       objects: {},
       names: ["license-plate"],
@@ -51,6 +53,10 @@ class LicensePlateDetection extends React.Component {
       isDataReceived: false,
       inferenceResult: "",
     });
+    this.videoRef = React.createRef();
+    this.canvasAnnotRef = React.createRef();
+    this.canvasOutputRef = React.createRef();
+    this.prevObject = React.createRef();
   };
 
   // functions for updating states
@@ -100,7 +106,7 @@ class LicensePlateDetection extends React.Component {
     this.setState({
       typeDataInput: this.state.typeDataInput === "camera" ? "image" : "camera",
     });
-    this.resetState();
+    this.reset();
   };
 
   render() {
@@ -147,7 +153,15 @@ class LicensePlateDetection extends React.Component {
                 )}
               </div>
             ) : (
-              <div>Loading model...</div>
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CircularProgress style={{color: "#D3B016"}}/>
+              </Box>
             )}
             <div className="inference-result">
               <h2 style={{ textAlign: "center" }}>Information</h2>
@@ -157,7 +171,7 @@ class LicensePlateDetection extends React.Component {
                 licensePlatePicture={
                   <Canvas canvasRef={this.canvasOutputRef} />
                 }
-                isDataInput={this.state.isDataInput}
+                isDataReceived={this.state.isDataReceived}
               />
             </div>
             <div className="vehicle-parking-logs">
@@ -169,7 +183,7 @@ class LicensePlateDetection extends React.Component {
                 postUserDataUrl={
                   "https://us-central1-vepay-go.cloudfunctions.net/user/registration"
                 }
-                isDataInput={this.state.isDataInput}
+                isDataReceived={this.state.isDataReceived}
                 inferenceResult={this.state.inferenceResult}
               />
             </div>

@@ -147,13 +147,14 @@ class LicensePlateDetectionImage extends React.Component {
       "Content-Type": "application/json",
     };
     axios
-      .post("http://localhost:5000", body, {
+      .post("https://vepay-go.uc.r.appspot.com", body, {
         headers: headers,
       })
       .then((response) => {
         // update the inference result
         this.props.setInferenceResult(response.data["prediction"]);
-      });
+        this.props.setIsDataReceived(true);
+      });    
   };
 
   drawBoundingBox = (item, ctx) => {
