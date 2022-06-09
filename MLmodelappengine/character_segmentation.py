@@ -9,13 +9,13 @@ width = 400
 height = 220
 
 
-def detect_chars(imag, showSteps=False):
+def detect_chars(img, showSteps=False):
     """
     This function will receive an argument img which is an array of pixels which will be
     processed and return array of character
     """
     
-    image = np.array(imag, np.uint8)
+    image = np.array(img, np.uint8)
     image = cv2.resize(image, (width, height))
 
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
