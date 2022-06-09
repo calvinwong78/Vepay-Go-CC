@@ -397,6 +397,7 @@ tr rd:last-child {
     background: #fff;
     padding: 2rem;
     border-radius: 2px;
+    text-align: center;
 }
 
 .auth{
