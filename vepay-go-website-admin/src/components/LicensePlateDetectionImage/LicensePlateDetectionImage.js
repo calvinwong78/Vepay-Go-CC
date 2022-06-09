@@ -139,7 +139,6 @@ class LicensePlateDetectionImage extends React.Component {
 
     // send data to flask
     // fetch
-    this.props.setIsDataReceived(true);
 
     const body = { "license-plate": data["regionOfInterestArr"] };
     const headers = {

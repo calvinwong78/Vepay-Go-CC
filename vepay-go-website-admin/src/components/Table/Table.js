@@ -29,30 +29,66 @@ class Table extends React.Component {
       .catch((err) => console.log(err));
   };
 
-  postUserData = (licenseNumber) => {
-    const headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    };
+  // postUserData = (licenseNumber) => {
+  //   const headers = {
+  //     "Access-Control-Allow-Origin": "*",
+  //     "Content-Type": "application/json",
+  //   };
 
-    const jsonData = {
-      licenseNumber: licenseNumber,
-    };
+  //   const jsonData = {
+  //     licenseNumber: licenseNumber,
+  //   };
 
-    axios
-      .post(this.props.postUserDataUrl, jsonData, { headers: headers })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
+  //   axios
+  //     .post(this.props.postUserDataUrl, jsonData, { headers: headers })
+  //     .then((res) => {
+  //       console.log(res);
+  //       console.log(res.data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   componentDidUpdate() {
-    console.log("didupdate");
-    if (this.props.isDataInput) {
-      this.postUserData(this.props.inferenceResult);
-      this.getUserData();
+    if (this.props.isDataReceived) {
+      console.log("MASUKKKKK");
+      const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      };
+
+      const jsonData = {
+        licenseNumber: this.props.inferenceResult,
+      };
+
+      axios
+        .get(
+          "https://us-central1-vepay-go.cloudfunctions.net/transaction/inside/" +
+            this.props.inferenceResult,
+          { headers: headers }
+        )
+        .then((res) => {
+          const data = res.data.response;
+          console.log(data);
+          if (data === 0) {
+            axios
+              .post(this.props.postUserDataUrl, jsonData, { headers: headers })
+              .then((res) => {
+                console.log("post", res);
+                this.getUserData();
+              })
+              .catch((err) => console.log(err));
+          } else {
+            console.log("Masuk udpate");
+            axios
+              .put(this.props.postUserDataUrl, jsonData, { headers: headers })
+              .then((res) => {
+                console.log("put response: ", res);
+                this.getUserData();
+              })
+              .catch((err) => console.log(err));
+          }
+        })
+        .catch((err) => console.log(err));
     }
   }
 

@@ -42,10 +42,6 @@ class InferenceResult extends React.Component {
           <div>{this.props.inferenceResult}</div>
         </div>
         <div style={{ height: "20%" }}>
-          <h3>Location: </h3>
-          <div>{this.props.location}</div>
-        </div>
-        <div style={{ height: "20%" }}>
           <h3>Date Entered: </h3>
           <div>{this.state.date}</div>
         </div>

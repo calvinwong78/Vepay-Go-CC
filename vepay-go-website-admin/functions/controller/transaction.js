@@ -130,5 +130,19 @@ transApp.delete("/transactions/:id", async (req, res) => {
   res.status(200).send({"response": `Transaction deleted with ID: ${transactionId}`});
 });
 
+// check if license plate already inside
+transApp.get("/inside/:plat", async (req, res) => {
+  const transactionData = [];
+  const snapshotTransaction = await db.collection("transactions").where("licenseNumber", "==", req.params.plat).where("status", "==", "inside").get();
+  snapshotTransaction.forEach((doc) => {
+    const data = doc.data();
+    transactionData.push(data);
+  });
+
+  if (transactionData.length === 0) {
+    return res.status(200).send({"response": 0});
+  }
+  res.status(200).send({"response": 1});
+});
 
 exports.transaction = functions.https.onRequest(transApp);

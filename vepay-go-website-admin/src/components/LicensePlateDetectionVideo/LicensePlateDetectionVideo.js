@@ -290,7 +290,6 @@ class LicensePlateDetectionVideo extends Component {
     // function hans
     // function bintang
 
-
     // send data to flask
     // fetch
 
@@ -308,16 +307,6 @@ class LicensePlateDetectionVideo extends Component {
         this.props.setInferenceResult(response.data["prediction"]);
         this.props.setIsDataReceived(true);
       });
-    
-    
-    // axios
-    //   .post("https://vepay-go.uc.r.appspot.com", body, {
-    //     headers: headers,
-    //   })
-    //   .then((response) => {
-    //     // update the inference result
-    //     this.props.setInferenceResult(response.data["prediction"]);
-    //   });
   };
 
   update = (valid_detections_data) => {
