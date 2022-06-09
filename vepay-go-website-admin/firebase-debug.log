@@ -1,0 +1,136 @@
+[debug] [2022-06-09T15:13:57.390Z] ----------------------------------------------------------------------
+[debug] [2022-06-09T15:13:57.391Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\calvi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-06-09T15:13:57.392Z] CLI Version:   11.0.1
+[debug] [2022-06-09T15:13:57.392Z] Platform:      win32
+[debug] [2022-06-09T15:13:57.392Z] Node Version:  v16.15.0
+[debug] [2022-06-09T15:13:57.392Z] Time:          Thu Jun 09 2022 22:13:57 GMT+0700 (Western Indonesia Time)
+[debug] [2022-06-09T15:13:57.392Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-06-09T15:13:57.434Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-06-09T15:13:57.435Z] > authorizing via signed-in user (c2293f2482@bangkit.academy)
+[debug] [2022-06-09T15:13:57.435Z] [iam] checking project vepay-go for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-06-09T15:13:57.436Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/vepay-go:testIamPermissions [none]
+[debug] [2022-06-09T15:13:57.436Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vepay-go:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-06-09T15:13:58.602Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/vepay-go:testIamPermissions 200
+[debug] [2022-06-09T15:13:58.602Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vepay-go:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-06-09T15:13:58.603Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/vepay-go/serviceAccounts/vepay-go@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2022-06-09T15:13:58.603Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/vepay-go/serviceAccounts/vepay-go@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2022-06-09T15:13:59.824Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/vepay-go/serviceAccounts/vepay-go@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2022-06-09T15:13:59.824Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/vepay-go/serviceAccounts/vepay-go@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2022-06-09T15:13:59.825Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:00.192Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:00.192Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'vepay-go'...
+[info] 
+[info] i  deploying firestore, functions, hosting 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] +  functions: Finished running predeploy script. 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2022-06-09T15:14:01.533Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/vepay-go:test [none]
+[debug] [2022-06-09T15:14:01.533Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/vepay-go:test [omitted]
+[debug] [2022-06-09T15:14:02.896Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/vepay-go:test 200
+[debug] [2022-06-09T15:14:02.896Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/vepay-go:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2022-06-09T15:14:02.897Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:03.259Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:03.259Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2022-06-09T15:14:03.261Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/cloudfunctions.googleapis.com [none]
+[debug] [2022-06-09T15:14:03.261Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/runtimeconfig.googleapis.com [none]
+[debug] [2022-06-09T15:14:03.262Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/cloudbuild.googleapis.com [none]
+[debug] [2022-06-09T15:14:03.262Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/artifactregistry.googleapis.com [none]
+[debug] [2022-06-09T15:14:04.669Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/cloudfunctions.googleapis.com 200
+[debug] [2022-06-09T15:14:04.669Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2022-06-09T15:14:04.690Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/artifactregistry.googleapis.com 200
+[debug] [2022-06-09T15:14:04.691Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/artifactregistry.googleapis.com [omitted]
+[debug] [2022-06-09T15:14:04.707Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/runtimeconfig.googleapis.com 200
+[debug] [2022-06-09T15:14:04.707Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2022-06-09T15:14:04.715Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/cloudbuild.googleapis.com 200
+[debug] [2022-06-09T15:14:04.715Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/vepay-go/services/cloudbuild.googleapis.com [omitted]
+[info] +  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2022-06-09T15:14:04.715Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go/adminSdkConfig [none]
+[debug] [2022-06-09T15:14:05.404Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go/adminSdkConfig 200
+[debug] [2022-06-09T15:14:05.405Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go/adminSdkConfig {"projectId":"vepay-go","databaseURL":"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app","storageBucket":"vepay-go.appspot.com","locationId":"us-central"}
+[debug] [2022-06-09T15:14:05.405Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/vepay-go/configs [none]
+[debug] [2022-06-09T15:14:06.568Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/vepay-go/configs 200
+[debug] [2022-06-09T15:14:06.568Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/vepay-go/configs {}
+[info] i  functions: preparing codebase default for deployment 
+[debug] [2022-06-09T15:14:06.569Z] Validating nodejs source
+[debug] [2022-06-09T15:14:08.049Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "fcm-node": "^1.6.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-06-09T15:14:08.050Z] Building nodejs source
+[debug] [2022-06-09T15:14:08.050Z] Analyzing nodejs backend spec
+[debug] [2022-06-09T15:14:08.051Z] Could not find functions.yaml. Must use http discovery
+[debug] [2022-06-09T15:14:08.199Z] Serving at port 9005
+
+[debug] [2022-06-09T15:14:08.281Z] Got response from /__/functions.yaml {"endpoints":{"user":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"user"},"vehicle":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"vehicle"},"transaction":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"transaction"},"UserSignup":{"platform":"gcfv1","eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","eventFilters":{"resource":"projects/vepay-go"},"retry":false},"labels":{},"entryPoint":"UserSignup"},"UserDelete":{"platform":"gcfv1","eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.delete","eventFilters":{"resource":"projects/vepay-go"},"retry":false},"labels":{},"entryPoint":"UserDelete"},"FCMm":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"FCMm"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2022-06-09T15:14:08.286Z] shutdown requested via /__/quitquitquit
+
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged C:\Users\calvi\OneDrive\Documents\GitHub\Vepay-Go-CC\vepay-go-website-admin\functions (75.39 KB) for uploading 
+[debug] [2022-06-09T15:14:08.331Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/vepay-go/locations/-/functions [none]
+[debug] [2022-06-09T15:14:08.998Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/vepay-go/locations/-/functions 200
+[debug] [2022-06-09T15:14:08.998Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/vepay-go/locations/-/functions {"functions":[{"name":"projects/vepay-go/locations/us-central1/functions/FCMm","httpsTrigger":{"url":"https://us-central1-vepay-go.cloudfunctions.net/FCMm","securityLevel":"SECURE_ALWAYS"},"status":"ACTIVE","entryPoint":"FCMm","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"vepay-go@appspot.gserviceaccount.com","updateTime":"2022-06-09T09:33:17.093Z","versionId":"8","labels":{"deployment-tool":"cli-firebase"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-414600276796.us-central1.cloudfunctions.appspot.com/3c0c0ad8-e3d7-40bb-bc23-c7da2fb2c96f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"vepay-go\",\"databaseURL\":\"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app\",\"storageBucket\":\"vepay-go.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"vepay-go"},"runtime":"nodejs16","ingressSettings":"ALLOW_ALL","buildId":"e7f6996d-7a07-416c-8f2f-bab415ec3d47","buildName":"projects/414238140587/locations/us-central1/builds/e7f6996d-7a07-416c-8f2f-bab415ec3d47","dockerRegistry":"CONTAINER_REGISTRY"},{"name":"projects/vepay-go/locations/us-central1/functions/UserDelete","eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.delete","resource":"projects/vepay-go","service":"firebaseauth.googleapis.com","failurePolicy":{}},"status":"ACTIVE","entryPoint":"UserDelete","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"vepay-go@appspot.gserviceaccount.com","updateTime":"2022-06-09T09:33:17.119Z","versionId":"19","labels":{"deployment-tool":"cli-firebase"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-414600276796.us-central1.cloudfunctions.appspot.com/3c0c0ad8-e3d7-40bb-bc23-c7da2fb2c96f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"vepay-go\",\"databaseURL\":\"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app\",\"storageBucket\":\"vepay-go.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"vepay-go"},"runtime":"nodejs16","ingressSettings":"ALLOW_ALL","buildId":"e7f6996d-7a07-416c-8f2f-bab415ec3d47","buildName":"projects/414238140587/locations/us-central1/builds/e7f6996d-7a07-416c-8f2f-bab415ec3d47","dockerRegistry":"CONTAINER_REGISTRY"},{"name":"projects/vepay-go/locations/us-central1/functions/UserSignup","eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","resource":"projects/vepay-go","service":"firebaseauth.googleapis.com","failurePolicy":{}},"status":"ACTIVE","entryPoint":"UserSignup","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"vepay-go@appspot.gserviceaccount.com","updateTime":"2022-06-09T09:33:17.654Z","versionId":"19","labels":{"deployment-tool":"cli-firebase"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-414600276796.us-central1.cloudfunctions.appspot.com/3c0c0ad8-e3d7-40bb-bc23-c7da2fb2c96f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"vepay-go\",\"databaseURL\":\"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app\",\"storageBucket\":\"vepay-go.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"vepay-go"},"runtime":"nodejs16","ingressSettings":"ALLOW_ALL","buildId":"e7f6996d-7a07-416c-8f2f-bab415ec3d47","buildName":"projects/414238140587/locations/us-central1/builds/e7f6996d-7a07-416c-8f2f-bab415ec3d47","dockerRegistry":"CONTAINER_REGISTRY"},{"name":"projects/vepay-go/locations/us-central1/functions/transaction","httpsTrigger":{"url":"https://us-central1-vepay-go.cloudfunctions.net/transaction","securityLevel":"SECURE_ALWAYS"},"status":"ACTIVE","entryPoint":"transaction","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"vepay-go@appspot.gserviceaccount.com","updateTime":"2022-06-09T09:33:12.742Z","versionId":"13","labels":{"deployment-tool":"cli-firebase"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-414600276796.us-central1.cloudfunctions.appspot.com/3c0c0ad8-e3d7-40bb-bc23-c7da2fb2c96f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"vepay-go\",\"databaseURL\":\"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app\",\"storageBucket\":\"vepay-go.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"vepay-go"},"runtime":"nodejs16","ingressSettings":"ALLOW_ALL","buildId":"e7f6996d-7a07-416c-8f2f-bab415ec3d47","buildName":"projects/414238140587/locations/us-central1/builds/e7f6996d-7a07-416c-8f2f-bab415ec3d47","dockerRegistry":"CONTAINER_REGISTRY"},{"name":"projects/vepay-go/locations/us-central1/functions/user","httpsTrigger":{"url":"https://us-central1-vepay-go.cloudfunctions.net/user","securityLevel":"SECURE_ALWAYS"},"status":"ACTIVE","entryPoint":"user","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"vepay-go@appspot.gserviceaccount.com","updateTime":"2022-06-09T09:32:44.739Z","versionId":"65","labels":{"deployment-tool":"cli-firebase"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-414600276796.us-central1.cloudfunctions.appspot.com/3c0c0ad8-e3d7-40bb-bc23-c7da2fb2c96f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"vepay-go\",\"databaseURL\":\"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app\",\"storageBucket\":\"vepay-go.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"vepay-go"},"runtime":"nodejs16","ingressSettings":"ALLOW_ALL","buildId":"e7f6996d-7a07-416c-8f2f-bab415ec3d47","buildName":"projects/414238140587/locations/us-central1/builds/e7f6996d-7a07-416c-8f2f-bab415ec3d47","dockerRegistry":"CONTAINER_REGISTRY"},{"name":"projects/vepay-go/locations/us-central1/functions/vehicle","httpsTrigger":{"url":"https://us-central1-vepay-go.cloudfunctions.net/vehicle","securityLevel":"SECURE_ALWAYS"},"status":"ACTIVE","entryPoint":"vehicle","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"vepay-go@appspot.gserviceaccount.com","updateTime":"2022-06-09T09:33:16.646Z","versionId":"44","labels":{"deployment-tool":"cli-firebase"},"sourceUploadUrl":"https://storage.googleapis.com/uploads-414600276796.us-central1.cloudfunctions.appspot.com/3c0c0ad8-e3d7-40bb-bc23-c7da2fb2c96f.zip","environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"vepay-go\",\"databaseURL\":\"https://vepay-go-default-rtdb.asia-southeast1.firebasedatabase.app\",\"storageBucket\":\"vepay-go.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"vepay-go"},"runtime":"nodejs16","ingressSettings":"ALLOW_ALL","buildId":"e7f6996d-7a07-416c-8f2f-bab415ec3d47","buildName":"projects/414238140587/locations/us-central1/builds/e7f6996d-7a07-416c-8f2f-bab415ec3d47","dockerRegistry":"CONTAINER_REGISTRY"}]}
+[debug] [2022-06-09T15:14:08.998Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2alpha/projects/vepay-go/locations/-/functions [none]
+[debug] [2022-06-09T15:14:11.034Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2alpha/projects/vepay-go/locations/-/functions 200
+[debug] [2022-06-09T15:14:11.034Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2alpha/projects/vepay-go/locations/-/functions {}
+[debug] [2022-06-09T15:14:11.039Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:11.461Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:11.461Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2022-06-09T15:14:11.461Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:11.795Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:11.795Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2022-06-09T15:14:11.795Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:12.149Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:12.149Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2022-06-09T15:14:12.149Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:12.487Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:12.487Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2022-06-09T15:14:12.488Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:12.796Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:12.796Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2022-06-09T15:14:12.797Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go [none]
+[debug] [2022-06-09T15:14:13.137Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go 200
+[debug] [2022-06-09T15:14:13.138Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vepay-go {"projectId":"vepay-go","projectNumber":"414238140587","displayName":"Vepay-go","name":"projects/vepay-go","resources":{"hostingSite":"vepay-go","realtimeDatabaseInstance":"vepay-go-default-rtdb","storageBucket":"vepay-go.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[debug] [2022-06-09T15:14:13.139Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/414238140587/sites/vepay-go/versions [none]
+[debug] [2022-06-09T15:14:13.139Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/414238140587/sites/vepay-go/versions {"config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-06-09T15:14:14.754Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/414238140587/sites/vepay-go/versions 200
+[debug] [2022-06-09T15:14:14.754Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/414238140587/sites/vepay-go/versions {"name":"projects/414238140587/sites/vepay-go/versions/644716321ad0789c","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-06-09T15:14:14.755Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/vepay-go/releases pageSize=10&pageToken=
+[debug] [2022-06-09T15:14:14.756Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/vepay-go/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2022-06-09T15:14:15.925Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/vepay-go/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2022-06-09T15:14:15.925Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/vepay-go/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2022-06-09T15:14:15.925Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/vepay-go/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false [none]
+[debug] [2022-06-09T15:14:16.066Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/vepay-go/releases 200
+[debug] [2022-06-09T15:14:16.066Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/vepay-go/releases {"releases":[{"name":"projects/vepay-go/releases/cloud.firestore","rulesetName":"projects/vepay-go/rulesets/f3d451c9-6ec4-4c52-99c7-45509af3227c","createTime":"2022-05-25T05:48:14.722630Z","updateTime":"2022-06-09T09:31:33.606036Z"}]}
+[debug] [2022-06-09T15:14:16.067Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/vepay-go/rulesets/f3d451c9-6ec4-4c52-99c7-45509af3227c [none]
