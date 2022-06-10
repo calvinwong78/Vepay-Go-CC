@@ -9,7 +9,8 @@ class Table extends React.Component {
     this.column = [
       { heading: "LicenseNumber", value: "licenseNumber" },
       { heading: "Date/time", value: "fullDateEnter" },
-      { heading: "status", value: "status" },
+      { heading: "Status", value: "status" },
+      { heading: "Price", value: "price" },
     ];
   }
 
