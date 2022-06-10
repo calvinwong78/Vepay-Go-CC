@@ -15,13 +15,13 @@ we also create API for SQL database so you can choose using SQL or NOSQL databas
 * What you need : 
       <br>Text editor(Visual Studio Code recommended), firebase project/GCP project(GCP project and Firebase project is connected) and browser(Chrome   recommended)          </br>
 * If this is your first time using firebase then follow this following step to help you initialize Firebase environment 
-  <br>-Make sure to have project created in firebase console
-  <br>-Make a folder for your project 
-  <br>-Open Visual Studio Code
-  <br>-Change directory to your project folder 
-  <br>-Open new CMD and npm install -g firebase-tools(make sure you have NPM installed)
-  <br>-In CMD type firebase login and it will redirect you to browser to login to your firebase account or gcp account 
-  <br>-In CMD type firebase init and it will ask you a couple of question about which project you want to use and what services you want to use like hosting or function etc.
+  1. Make sure to have project created in firebase console
+  2. Make a folder for your project 
+  3. Open Visual Studio Code
+  4. Change directory to your project folder 
+  5. Open new CMD and npm install -g firebase-tools(make sure you have NPM installed)
+  6. In CMD type firebase login and it will redirect you to browser to login to your firebase account or gcp account 
+  7. In CMD type firebase init and it will ask you a couple of question about which project you want to use and what services you want to use like hosting or function etc.
   <br>-and after firebase init now you have firebase environment
 * Because we already uploaded package.json so you just need to copy it from our repository and npm install(For detail how to install you can view Readme file in each folder)
 
