@@ -2,8 +2,11 @@ from flask import Flask, jsonify
 from flask import request
 import numpy as np
 from character_segmentation import detect_chars, predict_characters, prepare_model
+from flask_cors import CORS
 
 app = Flask(__name__)
+# allow cors from all source
+CORS(app)
 
 @app.route("/", methods=['POST'])
 def index():

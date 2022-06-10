@@ -3,3 +3,4 @@ gunicorn
 opencv-python
 tensorflow
 numpy
+flask-cors
