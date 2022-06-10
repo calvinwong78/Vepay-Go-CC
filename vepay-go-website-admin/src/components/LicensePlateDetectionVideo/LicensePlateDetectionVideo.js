@@ -59,8 +59,6 @@ class LicensePlateDetectionVideo extends Component {
       requestAnimationFrame(() => {
         this.detectFrame(video, model);
       });
-
-      // startScope() and endScope() clean up unused tensor
       tf.engine().endScope();
     });
   };
@@ -298,6 +296,8 @@ class LicensePlateDetectionVideo extends Component {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     };
+    // set loading to true
+    this.props.setLoadingInferenceResult(true);
     axios
       .post("https://vepay-go.uc.r.appspot.com", body, {
         headers: headers,
@@ -306,6 +306,7 @@ class LicensePlateDetectionVideo extends Component {
         // update the inference result
         this.props.setInferenceResult(response.data["prediction"]);
         this.props.setIsDataReceived(true);
+        this.props.setLoadingInferenceResult(false);
       });
   };
 

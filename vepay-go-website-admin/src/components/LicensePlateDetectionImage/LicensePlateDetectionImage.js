@@ -145,6 +145,8 @@ class LicensePlateDetectionImage extends React.Component {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     };
+    // set loading to true
+    this.props.setLoadingInferenceResult(true);
     axios
       .post("https://vepay-go.uc.r.appspot.com", body, {
         headers: headers,
@@ -153,7 +155,8 @@ class LicensePlateDetectionImage extends React.Component {
         // update the inference result
         this.props.setInferenceResult(response.data["prediction"]);
         this.props.setIsDataReceived(true);
-      });    
+        this.props.setLoadingInferenceResult(false);
+      });
   };
 
   drawBoundingBox = (item, ctx) => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 import React from "react";
 import Canvas from "../../components/Canvas/Canvas";
 import Table from "../../components/Table/Table";
@@ -9,6 +10,8 @@ import * as Constants from "../../constants";
 import * as tf from "@tensorflow/tfjs";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class LicensePlateDetection extends React.Component {
   constructor(props) {
@@ -25,6 +28,7 @@ class LicensePlateDetection extends React.Component {
       inferenceResult: "",
       typeDataInput: "camera",
       model: null,
+      loadingInferenceResult: false,
     };
     // Setting up refs
     this.videoRef = React.createRef();
@@ -52,10 +56,9 @@ class LicensePlateDetection extends React.Component {
       currentImage: null,
       isDataReceived: false,
       inferenceResult: "",
+      loadingInferenceResult: false,
     });
     this.videoRef = React.createRef();
-    this.canvasAnnotRef = React.createRef();
-    this.canvasOutputRef = React.createRef();
     this.prevObject = React.createRef();
   };
 
@@ -102,16 +105,63 @@ class LicensePlateDetection extends React.Component {
     });
   };
 
+  setLoadingInferenceResult = (bool) => {
+    this.setState({
+      loadingInferenceResult: bool,
+    });
+  };
+
+  clearCanvas = () => {
+    let canvas = this.canvasAnnotRef.current;
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    canvas = this.canvasOutputRef.current;
+    ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  };
+
+  notify = (text, type) => {
+    // eslint-disable-next-line default-case
+    switch (type) {
+      case "success":
+        toast.success(text, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        break;
+
+      case "error":
+        toast.error(text, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        break;
+    }
+  };
+
   changeTypeDataInput = () => {
     this.setState({
       typeDataInput: this.state.typeDataInput === "camera" ? "image" : "camera",
     });
     this.reset();
+    this.clearCanvas();
   };
 
   render() {
     return (
       <div>
+        <ToastContainer />
         <div>
           <div className="liveheader">
             <h1>Live Camera Feed</h1>
@@ -140,6 +190,7 @@ class LicensePlateDetection extends React.Component {
                     canvasAnnotRef={this.canvasAnnotRef}
                     canvasOutputRef={this.canvasOutputRef}
                     prevObject={this.prevObject}
+                    setLoadingInferenceResult={this.setLoadingInferenceResult}
                   />
                 ) : (
                   <LicensePlateDetectionImage
@@ -149,6 +200,7 @@ class LicensePlateDetection extends React.Component {
                     parentState={this.state}
                     canvasAnnotRef={this.canvasAnnotRef}
                     canvasOutputRef={this.canvasOutputRef}
+                    setLoadingInferenceResult={this.setLoadingInferenceResult}
                   />
                 )}
               </div>
@@ -171,6 +223,8 @@ class LicensePlateDetection extends React.Component {
                   <Canvas canvasRef={this.canvasOutputRef} />
                 }
                 isDataReceived={this.state.isDataReceived}
+                loadingInferenceResult={this.state.loadingInferenceResult}
+                setLoadingInferenceResult={this.setLoadingInferenceResult}
               />
             </div>
             <div className="vehicle-parking-logs">
@@ -184,6 +238,7 @@ class LicensePlateDetection extends React.Component {
                 }
                 isDataReceived={this.state.isDataReceived}
                 inferenceResult={this.state.inferenceResult}
+                notify={this.notify}
               />
             </div>
           </div>

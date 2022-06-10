@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+
 class Table extends React.Component {
   constructor() {
     super();
@@ -74,22 +75,28 @@ class Table extends React.Component {
             axios
               .post(this.props.postUserDataUrl, jsonData, { headers: headers })
               .then((res) => {
-                console.log("post", res);
                 this.getUserData();
+                this.props.notify("Vehicle is checking in ...", "success")
               })
-              .catch((err) => console.log(err));
+              .catch((err) => {
+                console.log(err)
+                this.props.notify("Vehicle's license plate doesn't exist in database", "error")
+              });
           } else {
-            console.log("Masuk udpate");
             axios
               .put(this.props.postUserDataUrl, jsonData, { headers: headers })
               .then((res) => {
-                console.log("put response: ", res);
                 this.getUserData();
+                this.props.notify("Vehicle is checking out ...", "success")
               })
-              .catch((err) => console.log(err));
+              .catch((err) => {
+                console.log(err)
+              });
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err)
+        });
     }
   }
 
