@@ -156,6 +156,7 @@ class LicensePlateDetectionImage extends React.Component {
         this.props.setInferenceResult(response.data["prediction"]);
         this.props.setIsDataReceived(true);
         this.props.setLoadingInferenceResult(false);
+        this.props.setDateAndTime();
       });
   };
 

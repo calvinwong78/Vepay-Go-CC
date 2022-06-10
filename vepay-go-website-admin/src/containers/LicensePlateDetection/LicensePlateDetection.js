@@ -29,6 +29,8 @@ class LicensePlateDetection extends React.Component {
       typeDataInput: "camera",
       model: null,
       loadingInferenceResult: false,
+      date: "",
+      time: "",
     };
     // Setting up refs
     this.videoRef = React.createRef();
@@ -57,6 +59,8 @@ class LicensePlateDetection extends React.Component {
       isDataReceived: false,
       inferenceResult: "",
       loadingInferenceResult: false,
+      date: "",
+      time: "",
     });
     this.videoRef = React.createRef();
     this.prevObject = React.createRef();
@@ -102,6 +106,23 @@ class LicensePlateDetection extends React.Component {
   setInferenceResult = (newInferenceResult) => {
     this.setState({
       inferenceResult: newInferenceResult,
+    });
+  };
+
+  setDateAndTime = () => {
+    let today = new Date();
+    let date =
+      today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear();
+    let time = today.toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+    });
+    console.log("testtttttttttttttttttttttttttttttttttttttttt", date, time);
+    this.setState({
+      date: date,
+      time: time,
     });
   };
 
@@ -191,6 +212,7 @@ class LicensePlateDetection extends React.Component {
                     canvasOutputRef={this.canvasOutputRef}
                     prevObject={this.prevObject}
                     setLoadingInferenceResult={this.setLoadingInferenceResult}
+                    setDateAndTime={this.setDateAndTime}
                   />
                 ) : (
                   <LicensePlateDetectionImage
@@ -201,6 +223,7 @@ class LicensePlateDetection extends React.Component {
                     canvasAnnotRef={this.canvasAnnotRef}
                     canvasOutputRef={this.canvasOutputRef}
                     setLoadingInferenceResult={this.setLoadingInferenceResult}
+                    setDateAndTime={this.setDateAndTime}
                   />
                 )}
               </div>
@@ -225,6 +248,8 @@ class LicensePlateDetection extends React.Component {
                 isDataReceived={this.state.isDataReceived}
                 loadingInferenceResult={this.state.loadingInferenceResult}
                 setLoadingInferenceResult={this.setLoadingInferenceResult}
+                time={this.state.time}
+                date={this.state.date}
               />
             </div>
             <div className="vehicle-parking-logs">
