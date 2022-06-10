@@ -3,7 +3,7 @@ This repositories is for Cloud-computing path of vepay-go.
 
 ## Description
 
-In this repositories there is 3 folder which is MLmodelappengine, SQLcarfunction and vepay-go-website-admin. MLmodelappengine is for deployment model and deployed in GAE(Google App Engine) using flask also contain (1 model of our ML model). SQLcarfunction is API for sql query of our application which using TypeOrm and deployed using firebase function. vepay-go-website-admin is frontend of our admin website also contain 1 model of our ML model this folder also contain our NOSQL api which is being used and for frontend we use html,css,javascript and react.
+In this repositories there is 3 folder which is MLmodelappengine, SQLfrcarfunction and vepay-go-website-admin. MLmodelappengine is for deployment model and deployed in GAE(Google App Engine) using flask also contain (1 model of our ML model). SQLfrcarfunction is API for sql query of our application which using TypeOrm and deployed using firebase function. vepay-go-website-admin is frontend of our admin website also contain 1 model of our ML model this folder also contain our NOSQL api which is being used and for frontend we use html,css,javascript and react.
 
 ## Getting Started
 
