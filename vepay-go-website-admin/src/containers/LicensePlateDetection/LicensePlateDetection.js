@@ -119,7 +119,6 @@ class LicensePlateDetection extends React.Component {
       second: "numeric",
       hour12: true,
     });
-    console.log("testtttttttttttttttttttttttttttttttttttttttt", date, time);
     this.setState({
       date: date,
       time: time,
