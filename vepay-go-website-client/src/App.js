@@ -38,8 +38,7 @@ const handleAction = (id) => {
           toast.error('Email Already in Use');
         }
           })
-         
-      
+ 
   }
   if (id === 1) {
    signInWithEmailAndPassword(authentication, email, password)
