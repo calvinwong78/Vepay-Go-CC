@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from './Button2';
 import { Link } from 'react-router-dom';
 
-export default function BasicTextFields({ title, setPassword, setEmail, handleAction, link}) {
+export default function BasicTextFields({ title, setPassword, setEmail, handleAction, setFullname}) {
   
     return (
         <div>
@@ -33,6 +33,12 @@ export default function BasicTextFields({ title, setPassword, setEmail, handleAc
                     label="Enter the Password"
                     variant="outlined"
                     onChange={(e) => setPassword(e.target.value)}
+                />
+                <TextField
+                    id="fullname"
+                    label="Fullname"
+                    variant="outlined"
+                    onChange={(e) => setFullname(e.target.value)}
                 />
                 <Link to='/register'>
                  Register
