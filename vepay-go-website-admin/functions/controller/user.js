@@ -63,6 +63,18 @@ userApp.post("/registration", async (req, res) => {
   res.status(201).send({"response": "Registration success!"});
 });
 
+// register user data
+userApp.post("/registration/token/:id", async (req, res) => {
+  const userData = req.body;
+
+  db.collection("users").doc(req.params.id).collection("userData").add({
+    ownerId: req.params.id,
+    token: userData.token,
+  });
+
+  res.status(201).send({"response": "User Data Registration success!"});
+});
+
 // edit user
 userApp.put("/users/:id", async (req, res) => {
   const snapshot = await db.collection("users").doc(req.params.id).get();
