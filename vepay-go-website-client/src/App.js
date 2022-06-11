@@ -7,7 +7,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import Products from './components/pages/Products';
 import SignUp from './components/pages/SignUp';
 import Form from './components/Form';
-import { app } from './Firebase';
+import firebase from './Firebase';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -39,15 +39,6 @@ const handleAction = (id) => {
         }
           })
          
-            let res =  fetch("https://us-central1-vepay-go.cloudfunctions.net/user/registration", {
-              method: "POST",
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                email: email,
-              }),
-            });
       
   }
   if (id === 1) {

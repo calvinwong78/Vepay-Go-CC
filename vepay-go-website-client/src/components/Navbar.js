@@ -48,6 +48,15 @@ function Navbar() {
             </li>
             <li className='nav-item'>
               <Link
+                to='/products'
+                className='nav-links'
+                onClick={closeMobileMenu}
+              >
+                FCM
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link
                 to='/Registervehicle'
                 className='nav-links'
                 onClick={closeMobileMenu}
