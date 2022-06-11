@@ -2,43 +2,43 @@ import React, {useState} from 'react';
 import './Register.css';
 import { Button } from './Button';
 import { useNavigate } from 'react-router-dom';
+import db from '../Firebase';
 
-function Registration() {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [Password, setPassword] = useState("");
+function Registration(setEmail) {
+    const [VehicleID, setVehicleID] = useState("");
     const [message, setMessage] = useState("");
     let navigate = useNavigate();
   
     let handleSubmit = async (e) => {
       e.preventDefault();
-      try {
+
+
+
+
+      
+     /* try {
         let res = await fetch("https://us-central1-vepay-go.cloudfunctions.net/user/registration", {
           method: "POST",
           headers: {
-    
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            email: email,
-            fullname: name,
-            password: Password
+       
+            licenseNumber: VehicleID,
+         
           }),
         });
         console.log(res)
         let resJson = await res.json();
         if (res.status === 201) {
-          setName("");
-          setEmail("");
-          setPassword("");
+          setVehicleID("");
           setMessage("User created successfully");
-          navigate("/")
         } else {
           setMessage("Some error occured");
         }
       } catch (err) {
         console.log(err);
-      }
+      }*/
     };
   
     return (
@@ -46,21 +46,9 @@ function Registration() {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            value={name}
-            placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            value={email}
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            value={Password}
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
+            value={VehicleID}
+            placeholder="vehicleID"
+            onChange={(e) => setVehicleID(e.target.value)}
           />
   
           <button type="submit">Create</button>

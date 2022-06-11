@@ -2,8 +2,10 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from './Button2';
+import { Link } from 'react-router-dom';
 
-export default function BasicTextFields({title}) {
+export default function BasicTextFields({ title, setPassword, setEmail, handleAction, link}) {
+  
     return (
         <div>
             <div className="heading-container">
@@ -20,11 +22,27 @@ export default function BasicTextFields({title}) {
                 noValidate
                 autoComplete="off"
             >
-                <TextField id="email" label="Enter the Email" variant="outlined" />
-                <TextField id="password" label="Enter the Password" variant="outlined" />
+                <TextField
+                    id="email"
+                    label="Enter the Email"
+                    variant="outlined"
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                    id="password"
+                    label="Enter the Password"
+                    variant="outlined"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Link to='/register'>
+                 Register
+                 </Link>
+                 or
+                 <Link to='/'>
+                 Login
+                 </Link>
             </Box>
-
-            <Button title={title}/>
+            <Button title={title} handleAction={handleAction} />
         </div>
     );
 }
