@@ -1,12 +1,11 @@
-.Registration{
-height: 100vh;
+.registration{
+height: 60vh;
 width: 100%;
-display: flex;
+
 flex-direction: column;
 justify-content: center;
 align-items: center;
-box-shadow: inset 0 0 0 1000px rgba(203, 223, 91, 0.2);
-object-fit: contain;
+
 
 }
 

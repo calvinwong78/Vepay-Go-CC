@@ -5,8 +5,9 @@ import Button from './Button2';
 import { Link } from 'react-router-dom';
 import { Container, Grid } from '@mui/material';
 
+
 export default function BasicTextFields({ title, setPassword, setEmail, handleAction,}) {
-  
+    const [showPassword, setShowPassword] = React.useState(false);
     return (
         <div>
             <Container component="main" maxWidth="xs">
@@ -17,8 +18,10 @@ export default function BasicTextFields({ title, setPassword, setEmail, handleAc
             </div>
 
             <Box
+             alignItems="center"
+             justifyContent="center"
+             
                 component="form"
-               
                 noValidate
                 autoComplete="off"
             >
@@ -33,6 +36,7 @@ export default function BasicTextFields({ title, setPassword, setEmail, handleAc
                 </Grid>
                 <Grid item xs={12} sm={6}>
                 <TextField
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     label="Enter the Password"
                     variant="outlined"
@@ -50,6 +54,7 @@ export default function BasicTextFields({ title, setPassword, setEmail, handleAc
                  </Grid>
                  </Grid>
             </Box>
+            
             <Button title={title} handleAction={handleAction} />
             </Container>
         </div>

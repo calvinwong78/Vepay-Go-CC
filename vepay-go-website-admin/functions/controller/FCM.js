@@ -1,32 +1,27 @@
 /* eslint-disable linebreak-style */
-const FCM = require("fcm-node");
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const express = require("express");
+const cors = require("cors");
+const App = express();
+App.use(cors({origin: true}));
 
-exports.FCMm = functions.https.onRequest(async (request, response) => {
-  // eslint-disable-next-line max-len
-  const serverKey = "BEbvcttL61UptSHoKH-VMZ9MUBghGi_xTQAa6RxYHdgFo2TNxTEkB-8_W_exMLepIiNKCHkakz4PzXuZoXkB5Xo";
-  const fcm = new FCM(serverKey);
-  const userkey = request.body.FCM;
-  try {
-    const message = {
-      to: userkey,
-      notification: {
-        title: "NotifcatioTestAPP",
-        body: "{\"test masuk ga \"}",
-      },
-    };
-
-    fcm.send(message, function(err, response) {
-      if (err) {
-        console.log("Something has gone wrong!" + err);
-        console.log("Respponse:! " + response);
-      } else {
-        // showToast("Successfully sent with response");
-        console.log("Successfully sent with response: ", response);
-      }
-    });
-    response.status(201).send("berhasil kirim");
-  } catch (error) {
-    response.send(error);
-  }
+App.post("/sendNTF/:id", async (req, res) => {
+  const FCMToken = req.params.id;
+  const payload = {
+    token: FCMToken,
+    notification: {
+      title: "Vepay-Go",
+      body: "Terjadi Transaksi",
+    },
+  };
+  admin.messaging().send(payload).then((response) => {
+    // Response is a message ID string.
+    console.log("Successfully sent message:", response);
+    return {success: true};
+  }).catch((error) => {
+    return {error: error.code};
+  });
 });
+
+exports.FCM = functions.https.onRequest(App);

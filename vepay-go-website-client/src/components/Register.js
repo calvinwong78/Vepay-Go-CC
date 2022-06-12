@@ -48,17 +48,12 @@ function Registration(setEmail) {
   };
 
   return (
+    <div className="registration ">
     <div class="card-body py-5 px-md-5">
       <div class="row g-0 d-flex align-items-center">
-        <div class="col-lg-4 d-none d-lg-flex">
-          <img
-            src="https://mdbootstrap.com/img/new/ecommerce/vertical/004.jpg"
-            alt="Trendy Pants and Shoes"
-            class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5"
-          />
-        </div>
+        
         <div class="col-lg-8">
-          <div class="card-body py-5 px-md-5">
+          <div class="card-body py-10 px-md-5">
             <form onSubmit={handleSubmit}>
               <div class="form-outline mb-4">
                 <input
@@ -87,6 +82,7 @@ function Registration(setEmail) {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
