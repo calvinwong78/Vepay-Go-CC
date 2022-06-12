@@ -18,14 +18,6 @@ const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const [setfullname, setFullname] = useState('');
 let navigate = useNavigate();
-function updateFirestore(form, uidNewUser) {
-  //push data into firestore using the uid provided
-  let data = {};
-  data['name'] = setFullname;
-  //se empuja el arreglo data en el documento del usuario
-  this.afs.collection('users').doc(uidNewUser).set(data);
-  console.log(data, uidNewUser);
-}
 const handleAction = (id) => {
   const authentication = getAuth();
   if (id === 2) {
@@ -96,7 +88,6 @@ useEffect(() => {
                   title="Register"
                   setEmail={setEmail}
                   setPassword={setPassword}
-                  setfullname={setFullname}
                   handleAction={() => handleAction(2)}
                 />}
             />

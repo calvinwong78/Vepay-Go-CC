@@ -50,6 +50,7 @@
   max-width: 1000px;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 
 .footer-link-wrapper {
@@ -64,6 +65,7 @@
   text-align: left;
   width: 160px;
   box-sizing: border-box;
+  
 }
 
 .footer-link-items h2 {
