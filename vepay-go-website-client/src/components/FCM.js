@@ -34,7 +34,7 @@ function FCM() {
           } catch (err) {
             console.log(err);
           }
-          
+          console.log(currentToken)
       } else {
         // Show permission request UI
         console.log(

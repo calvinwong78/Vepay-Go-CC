@@ -74,28 +74,42 @@ class Table extends React.Component {
           if (data === 0) {
             axios
               .post(this.props.postUserDataUrl, jsonData, { headers: headers })
-              .then((res) => {
+              .then(() => {
                 this.getUserData();
-                this.props.notify("Vehicle is checking in ...", "success")
+                this.props.notify("Vehicle is checking in ...", "success");
               })
               .catch((err) => {
-                console.log(err)
-                this.props.notify("Vehicle's license plate doesn't exist in database", "error")
+                console.log(err);
+                this.props.notify(
+                  "Vehicle's license plate doesn't exist in database",
+                  "error"
+                );
               });
           } else {
             axios
               .put(this.props.postUserDataUrl, jsonData, { headers: headers })
-              .then((res) => {
+              .then(() => {
                 this.getUserData();
-                this.props.notify("Vehicle is checking out ...", "success")
+                this.props.notify("Vehicle is checking out ...", "success");
+                // send notification to the firebase
+                const tokenfcm = res.data.token;
+                axios
+                  .post(
+                    "https://us-central1-vepay-go.cloudfunctions.net/FCM/sendNTF/" +
+                      tokenfcm,
+                    { headers: headers }
+                  )
+                  .then(() => {
+                    this.props.notify("Notification sent to user", "success");
+                  });
               })
               .catch((err) => {
-                console.log(err)
+                console.log(err);
               });
           }
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         });
     }
   }

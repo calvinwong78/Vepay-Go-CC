@@ -8,6 +8,9 @@ App.use(cors({origin: true}));
 
 App.post("/sendNTF/:id", async (req, res) => {
   const FCMToken = req.params.id;
+  // const body = {
+  //   paymentTotal: 5000,
+  // }
   const payload = {
     token: FCMToken,
     notification: {
