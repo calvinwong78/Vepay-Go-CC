@@ -63,7 +63,7 @@ userApp.post("/registration", async (req, res) => {
   res.status(201).send({"response": "Registration success!"});
 });
 
-// register user data
+// token registration
 userApp.post("/registration/token/:id", async (req, res) => {
   const userData = req.body;
 
@@ -100,7 +100,6 @@ userApp.put("/users/:id", async (req, res) => {
   await db.collection("users").doc(req.params.id).update(body);
   res.status(200).send("User profile updated!");
 });
-
 
 // detele user
 userApp.delete("/users/:id", async (req, res) => {

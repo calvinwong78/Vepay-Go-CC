@@ -48,6 +48,7 @@ vehicleApp.get("/vehicles/:plat", async (req, res) => {
 // register vehicle
 vehicleApp.post("/registration/:id", async (req, res) => {
   const snapshot = await db.collectionGroup("vehicles").get();
+  const snapshotToken = await db.collectionGroup("userData").where("ownerId", "==", req.params.id).limit(1).get();
   const vehicle = req.body;
 
   const vehicleNewLicense = vehicle.licenseNumber;
@@ -58,12 +59,19 @@ vehicleApp.post("/registration/:id", async (req, res) => {
     vehicleLicenseList.push(vehicleData);
   });
 
+  let userToken;
+  snapshotToken.forEach((FCMToken) => {
+    const dataToken = FCMToken.data();
+    userToken = dataToken.token;
+  });
+
   if (vehicleLicenseList.includes(vehicleNewLicense)) {
     return res.status(404).send({"response": "License Number Already Used!"});
   }
 
   userDb.doc(req.params.id).collection("vehicles").add({
     ownerId: req.params.id,
+    token: userToken,
     licenseNumber: vehicle.licenseNumber,
     vehicleType: vehicle.vehicleType,
   });

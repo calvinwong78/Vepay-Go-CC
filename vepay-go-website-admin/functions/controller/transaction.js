@@ -44,6 +44,31 @@ transApp.get("/transactions/:id", async (req, res) => {
   }
 });
 
+// get transaction byID and status inside
+transApp.get("/inside/:plat", async (req, res) => {
+  const transactionData = [];
+  let token;
+  const snapshotTransaction = await db.collection("transactions").where("licenseNumber", "==", req.params.plat).where("status", "==", "inside").get();
+  const snapshotToken = await db.collectionGroup("vehicles").where("licenseNumber", "==", req.params.plat).get();
+  snapshotTransaction.forEach((doc) => {
+    const data = doc.data();
+    transactionData.push(data);
+  });
+
+  snapshotToken.forEach((FCMToken) => {
+    const dataToken = FCMToken.data();
+    token = dataToken.token;
+  });
+
+  if (transactionData.length === 0) {
+    return res.status(200).send({"response": 0});
+  }
+  res.status(200).send({
+    "response": 1,
+    "token": token,
+  });
+});
+
 // Post transaction
 transApp.post("/transactions", async (req, res) => {
   const transactionData = [];
@@ -130,19 +155,5 @@ transApp.delete("/transactions/:id", async (req, res) => {
   res.status(200).send({"response": `Transaction deleted with ID: ${transactionId}`});
 });
 
-// check if license plate already inside
-transApp.get("/inside/:plat", async (req, res) => {
-  const transactionData = [];
-  const snapshotTransaction = await db.collection("transactions").where("licenseNumber", "==", req.params.plat).where("status", "==", "inside").get();
-  snapshotTransaction.forEach((doc) => {
-    const data = doc.data();
-    transactionData.push(data);
-  });
-
-  if (transactionData.length === 0) {
-    return res.status(200).send({"response": 0});
-  }
-  res.status(200).send({"response": 1});
-});
 
 exports.transaction = functions.https.onRequest(transApp);
